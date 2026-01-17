@@ -1,10 +1,9 @@
 import { Hono } from 'hono';
+import { appRouter } from './app-router';
 
 const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text('Hello, Hono!');
-});
+app.route('/', appRouter);
 
 export default {
   port: process.env.PORT || 3001,
