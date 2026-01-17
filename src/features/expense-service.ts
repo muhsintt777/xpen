@@ -5,7 +5,7 @@ interface Expense {
 }
 
 const LAST_ID = 0;
-const EXP:Expense[] = [];
+const EXP:Expense[] = [{id: 1, category: 'Food', amount: 50}];
 
 export class ExpenseService {
   static createExpense(category: string, amount: number,) {
