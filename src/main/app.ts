@@ -1,14 +1,8 @@
-import { Hono } from 'hono';
-import { appRouter } from './app-router';
+import express, { Express } from "express";
+import { appRouter } from "./app-router.js";
 
-const app = new Hono();
+const app: Express = express();
+app.use(express.json());
+app.use("/", appRouter);
 
-app.route('/', appRouter);
-
-export default {
-  port: process.env.PORT || 3001,
-  hostname: "0.0.0.0",
-  fetch: app.fetch,
-};
-
-
+export { app };

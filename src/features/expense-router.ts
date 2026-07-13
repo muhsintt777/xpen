@@ -1,9 +1,9 @@
-import { Hono } from 'hono';
-import { ExpenseController } from './expense-controller';
+import express, { Router } from "express";
+import { ExpenseController } from "./expense-controller.js";
 
-const expenseRouter = new Hono();
+const router: Router = express.Router();
 
-expenseRouter.get('/', ExpenseController.getAll);
-expenseRouter.post('/', ExpenseController.create);
+router.get("/", ExpenseController.getAll);
+router.post("/", ExpenseController.create);
 
-export { expenseRouter };
+export { router as expenseRouter };

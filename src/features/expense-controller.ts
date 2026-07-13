@@ -1,15 +1,15 @@
-import type { Context } from 'hono';
-import { ExpenseService } from './expense-service';
+import { Request, Response } from "express";
+import { ExpenseService } from "./expense-service.js";
 
 export class ExpenseController {
-  static getAll(c: Context) {
+  static getAll(req: Request, res: Response) {
     const expenses = ExpenseService.getAllExpense();
-    return c.json(expenses);
+    return res.json(expenses);
   }
 
-  static async create(c: Context) {
-    const { category, amount } = await c.req.json();
+  static async create(req: Request, res: Response) {
+    const { category, amount } = req.body;
     ExpenseService.createExpense(category, amount);
-    return c.json({ message: 'Expense created' }, 201);
+    return res.status(201).json({ message: "Expense created" });
   }
 }

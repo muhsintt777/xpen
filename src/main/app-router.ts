@@ -1,9 +1,7 @@
-import { Hono } from "hono";
-import { expenseRouter } from "../features/expense-router";
+import express, { Router } from "express";
+import { expenseRouter } from "../features/expense-router.js";
 
-const appRouter = new Hono();
+const router: Router = express.Router();
+router.use("/expense", expenseRouter);
 
-appRouter.route('/expense', expenseRouter);
-// other routes can be added here
-
-export { appRouter };
+export { router as appRouter };
