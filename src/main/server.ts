@@ -1,11 +1,21 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
+import { ENV, validateEnv } from '../configs/env.js';
 import { app } from './app.js';
-import { ENV } from '../configs/env.js';
+import { connectDb } from '../configs/db.js';
+import { ConsoleUtils } from '../utils/console-utils.js';
 
-const port = ENV.PORT;
+async function startServer(): Promise<void> {
+  try {
+    ConsoleUtils.logInfo('Starting server...');
+    validateEnv();
+    await connectDb();
+    const port = ENV.PORT;
+    app.listen(port, () => {
+      ConsoleUtils.logInfo(`Server is running on port ${port}`);
+    });
+  } catch (error) {
+    ConsoleUtils.logError(`Failed to start the server`);
+    process.exit(1);
+  }
+}
 
-app.listen(port, () => {
-  console.log(`Server is running on porddt ${port}`);
-});
+void startServer();
