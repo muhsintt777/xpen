@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
-import { ConsoleUtils } from '../utils/console-utils.js';
 dotenv.config();
+
+import { ConsoleUtils } from '../utils/console-utils.js';
 
 export const ENV = {
   PORT: Number(process.env.PORT),
