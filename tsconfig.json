@@ -7,6 +7,9 @@
     /* Modules */
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Project */
     "rootDir": "./src",

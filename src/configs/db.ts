@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
-import { ENV } from './env.js';
-import { ConsoleUtils } from '../utils/console-utils.js';
+import { ENV } from '@/configs/env.js';
+import { ConsoleUtils } from '@/utils/console-utils.js';
 
 const pool = new Pool({
   connectionString: ENV.DB_URL,

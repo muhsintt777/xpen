@@ -2,10 +2,9 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { appRouter } from './app-router.js';
-import { corsOptions } from '../configs/cors.js';
-import { errorHandler } from './error-handler.js';
-// todo: add absolute import
+import { appRouter } from '@/main/app-router.js';
+import { corsOptions } from '@/configs/cors.js';
+import { errorHandler } from '@/main/error-handler.js';
 
 const app: Express = express();
 app.use(morgan(':method :url :status'));

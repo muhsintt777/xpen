@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { ExpenseService } from "./expense-service.js";
+import { Request, Response } from 'express';
+import { ExpenseService } from '@/apis/expense-service.js';
 
 export class ExpenseController {
   static getAll(req: Request, res: Response) {
@@ -10,6 +10,6 @@ export class ExpenseController {
   static async create(req: Request, res: Response) {
     const { category, amount } = req.body;
     ExpenseService.createExpense(category, amount);
-    return res.status(201).json({ message: "Expense created" });
+    return res.status(201).json({ message: 'Expense created' });
   }
 }
