@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 import { getZodErrMessage } from '@/utils/common.js';
 import { CustomError } from '@/utils/error.js';
 import { ApiResponse } from '@/utils/api-response.js';
+import { ConsoleUtils } from '@/utils/console-utils.js';
 
 export const errorHandler = (
   err: Error,
@@ -22,7 +23,7 @@ export const errorHandler = (
       .status(403)
       .json(new ApiResponse(null, 'Invalid CSRF token', 'CSRF_ERROR'));
   } else {
-    console.log('unknow err: ', err);
+    ConsoleUtils.logError(`Unhandled error: \n ${err}`);
     res
       .status(500)
       .json(new ApiResponse(null, 'Something went wrong', 'UNKNOWN_ERROR'));
