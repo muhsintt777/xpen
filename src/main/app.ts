@@ -5,12 +5,14 @@ import morgan from 'morgan';
 import { appRouter } from '@/main/app-router.js';
 import { corsOptions } from '@/configs/cors.js';
 import { errorHandler } from '@/main/error-handler.js';
+import { healthHandler } from './health-handler.js';
 
 const app: Express = express();
 app.use(morgan(':method :url :status'));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
+app.get('/health', healthHandler);
 app.use('/', appRouter);
 app.use(errorHandler);
 
