@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ExpenseService } from '@/apis/expense-service.js';
+import { ExpenseService } from '@/apis/expense/expense-service.js';
 
 export class ExpenseController {
   static getAll(req: Request, res: Response) {
