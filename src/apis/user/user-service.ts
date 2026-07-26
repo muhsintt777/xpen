@@ -7,7 +7,7 @@ export class UserService {
   static async getUser(id: unknown) {
     const validatedId = validateId(id);
     const q = `SELECT id, fullname, email FROM users WHERE id = ${validatedId}`;
-    const result = await db.query(q);
+    const result = (await db.query(q)).fields;
     if (!result) throw new CustomError('RESOURCE_NOT_FOUND', 'User not found');
     return result;
   }
@@ -15,7 +15,7 @@ export class UserService {
   static async createUser(params: unknown) {
     const { fullname, email, password } = CreateUserSchema.parse(params);
     const q = `INSERT INTO users (fullname, email, password) VALUES ('${fullname}', '${email}', '${password}')`;
-    const result = db.query(q);
+    const result = await db.query(q);
     if (!result)
       throw new CustomError('INTERNAL_SERVER_ERROR', 'User not created');
   }
