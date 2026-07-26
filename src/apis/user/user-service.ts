@@ -7,7 +7,7 @@ export class UserService {
   static async getUser(id: unknown) {
     const validatedId = validateId(id);
     const q = `SELECT id, fullname, email FROM users WHERE id = ${validatedId}`;
-    const result = (await db.query(q)).fields;
+    const result = (await db.query(q)).rows[0];
     if (!result) throw new CustomError('RESOURCE_NOT_FOUND', 'User not found');
     return result;
   }
