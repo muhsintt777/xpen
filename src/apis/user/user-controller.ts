@@ -3,6 +3,11 @@ import { UserService } from './user-service.js';
 import { ApiResponse } from '@/utils/api-response.js';
 
 export class UserController {
+  static async getAllUsers(req: Request, res: Response) {
+    const result = await UserService.getAllUsers();
+    res.status(200).json(new ApiResponse(result));
+  }
+
   static async getCurrentUser(req: Request, res: Response) {
     // const userID = req.token?.userId!;
     // const result = await UserService.getUser(userID);
