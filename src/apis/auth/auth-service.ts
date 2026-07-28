@@ -4,13 +4,13 @@ import { LoginSchema } from './auth-validation.js';
 export class AuthService {
   static async login(params: unknown) {
     const { email, password } = LoginSchema.parse(params);
-    const q = `SELECT * FROM users WHERE email = ?`;
+    const q = `SELECT * FROM users WHERE email = $1`;
     const result = await db.query(q, [email]);
     // todo: create token
   }
 
   static async refreshToken(userID: string, refreshToken: string) {
-    const q = `SELECT * FROM users WHERE id = ? AND refresh_token = ?`;
+    const q = `SELECT * FROM users WHERE id = $1 AND refresh_token = $2`;
     const result = await db.query(q, [userID, refreshToken]);
     // todo: refresh token logic
   }
