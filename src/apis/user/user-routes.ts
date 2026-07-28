@@ -7,11 +7,11 @@ const router: Router = Router();
 router.post('/', asyncHandler(UserController.createUser));
 
 router.get('/', asyncHandler(UserController.getAllUsers));
-router.get(
-  '/currentuser',
-  // AuthMiddleware.verifyToken,
-  asyncHandler(UserController.getCurrentUser),
-);
+// router.get(
+//   '/currentuser',
+//   // AuthMiddleware.verifyToken,
+//   asyncHandler(UserController.getCurrentUser),
+// );
 router.get(
   '/:id',
   // AuthMiddleware.verifyToken,
