@@ -2,6 +2,7 @@ import { db } from '@/configs/db.js';
 import { validateId } from '@/utils/common.js';
 import { CustomError } from '@/utils/error.js';
 import { CreateUserSchema } from './user-validation.js';
+import { HashUtils } from '@/utils/crypto.js';
 
 export class UserService {
   static async getAllUsers() {
@@ -20,8 +21,9 @@ export class UserService {
 
   static async createUser(params: unknown) {
     const { fullname, email, password } = CreateUserSchema.parse(params);
-    const q = `INSERT INTO users (fullname, email, password) VALUES ('${fullname}', '${email}', '${password}')`;
-    await db.query(q);
+    const passwordHash = await HashUtils.hashString(password);
+    const q = `INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3)`;
+    await db.query(q, [fullname, email, passwordHash]);
   }
 
   static async deleteUser(id: unknown) {

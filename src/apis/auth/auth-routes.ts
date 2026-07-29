@@ -1,6 +1,7 @@
 import { asyncHandler } from '@/utils/async-handler.js';
 import { Router } from 'express';
 import { AuthController } from './auth-controller.js';
+import { AuthMiddleware } from '@/middlewares/auth-middleware.js';
 
 const router: Router = Router();
 
@@ -8,7 +9,15 @@ const router: Router = Router();
 // router.use(RateLimitMiddleware.auth);
 
 router.post('/login', asyncHandler(AuthController.login));
-router.post('/refresh', asyncHandler(AuthController.refreshToken));
-router.post('/logout', asyncHandler(AuthController.logout));
+router.post(
+  '/refresh',
+  AuthMiddleware.verifyToken,
+  asyncHandler(AuthController.refreshToken),
+);
+router.post(
+  '/logout',
+  AuthMiddleware.verifyToken,
+  asyncHandler(AuthController.logout),
+);
 
 export { router as authRouter };
