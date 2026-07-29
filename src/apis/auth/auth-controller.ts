@@ -20,5 +20,6 @@ export class AuthController {
 
   static async logout(req: Request, res: Response) {
     await AuthService.logout(req.token?.userId!);
+    res.status(200).json(new ApiResponse(null, 'Logout Success'));
   }
 }
