@@ -3,11 +3,11 @@ import { ENV } from '@/configs/env.js';
 import { CustomError } from './error.js';
 
 export interface AccessTokenData {
-  userId: string;
+  userId: number;
 }
 
 interface RefreshTokenData {
-  userId: string;
+  userId: number;
 }
 
 export class Token {
@@ -22,7 +22,8 @@ export class Token {
     try {
       const decoded = jwt.verify(token, ENV.ACCESS_TOKEN_KEY);
       return decoded as AccessTokenData;
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
       throw new CustomError('AUTH_TOKEN_EXPIRED', 'Token expired');
     }
   }
@@ -37,6 +38,7 @@ export class Token {
     try {
       const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_KEY);
       return decoded as RefreshTokenData;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new CustomError('SIGNED_OUT', 'Invalid token');
     }

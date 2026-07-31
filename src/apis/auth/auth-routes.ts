@@ -9,11 +9,7 @@ const router: Router = Router();
 // router.use(RateLimitMiddleware.auth);
 
 router.post('/login', asyncHandler(AuthController.login));
-router.post(
-  '/refresh',
-  AuthMiddleware.verifyToken,
-  asyncHandler(AuthController.refreshToken),
-);
+router.post('/refresh', asyncHandler(AuthController.refreshToken));
 router.post(
   '/logout',
   AuthMiddleware.verifyToken,

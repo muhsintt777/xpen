@@ -1,9 +1,10 @@
 import { db } from '@/configs/db.js';
-import { LoginSchema } from './auth-validation.js';
+import { LoginSchema, RefreshTokenSchema } from './auth-validation.js';
 import { CustomError } from '@/utils/error.js';
 import { User } from '../user/user-types.js';
 import { HashUtils } from '@/utils/crypto.js';
 import { Token } from '@/utils/token.js';
+import { validateId } from '@/utils/common.js';
 
 export class AuthService {
   static async login(params: unknown) {
@@ -38,13 +39,15 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  static async refreshToken(userID: string, refreshToken: string) {
+  static async refreshToken(params: unknown) {
+    const { refreshToken } = RefreshTokenSchema.parse(params);
+    const { userId } = Token.verifyRefreshToken(refreshToken);
     const q = `
       SELECT id
       FROM users
       WHERE id = $1 AND refresh_token = $2;
     `;
-    const user = (await db.query<Pick<User, 'id'>>(q, [userID, refreshToken]))
+    const user = (await db.query<Pick<User, 'id'>>(q, [userId, refreshToken]))
       .rows[0];
     if (!user) {
       throw new CustomError('SIGNED_OUT', 'Unauthorized');
@@ -53,12 +56,13 @@ export class AuthService {
     return Token.createAccessToken({ userId: user.id });
   }
 
-  static async logout(userID: string) {
+  static async logout(userID: number) {
+    const validatedId = validateId(userID);
     const q = `
       UPDATE users
       SET refresh_token = NULL
       WHERE id = $1;
     `;
-    await db.query(q, [userID]);
+    await db.query(q, [validatedId]);
   }
 }
