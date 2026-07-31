@@ -7,6 +7,7 @@ import { ApiResponse } from '@/utils/api-response.js';
 export class AuthController {
   static async login(req: Request, res: Response) {
     const result = await AuthService.login(req.body);
+    const test = '';
     res.status(200).json(new ApiResponse(result, 'Login Success'));
   }
 
