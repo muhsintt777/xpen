@@ -1,14 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { CustomError } from '@/utils/error.js';
-import { AccessTokenData, Token } from '@/utils/token.js';
-
-declare global {
-  namespace Express {
-    interface Request {
-      token?: AccessTokenData;
-    }
-  }
-}
+import { Token } from '@/utils/token.js';
 
 export class AuthMiddleware {
   static verifyToken(req: Request, _res: Response, next: NextFunction) {
