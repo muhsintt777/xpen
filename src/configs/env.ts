@@ -10,6 +10,7 @@ export const ENV = {
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY as string,
 };
 
+// todo: add zod validation
 export const validateEnv = (): void => {
   ConsoleUtils.logInfo('Validating environment variables...');
   const invalidEnvs = [];
