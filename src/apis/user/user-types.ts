@@ -6,3 +6,9 @@ export interface User {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface CreateUserParams {
+  email: string;
+  password: string;
+  fullname: string;
+}

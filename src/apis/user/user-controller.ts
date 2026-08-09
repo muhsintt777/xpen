@@ -20,12 +20,17 @@ export class UserController {
   }
 
   static async createUser(req: Request, res: Response) {
-    await UserService.createUser(req.body);
+    const payload = {
+      fullname: req.body.fullname as string,
+      email: req.body.email as string,
+      password: req.body.password as string,
+    };
+    await UserService.createUser(payload);
     res.status(201).json(new ApiResponse(null, 'User created'));
   }
 
   static async deleteUser(req: Request, res: Response) {
-    await UserService.deleteUser(req.params.id);
+    await UserService.deleteUser(req.params.id as string);
     res.status(200).json(new ApiResponse(null, 'User deleted'));
   }
 }

@@ -2,23 +2,29 @@ import { asyncHandler } from '@/utils/async-handler.js';
 import { Router } from 'express';
 import { UserController } from './user-controller.js';
 import { AuthMiddleware } from '@/middlewares/auth-middleware.js';
-
-// todo: verify token
+import { validateReq } from '@/middlewares/validation-middleware.js';
+import { CreateUserSchema } from './user-validation.js';
 
 const router: Router = Router();
 
-router.post('/', asyncHandler(UserController.createUser));
+router.post(
+  '/',
+  validateReq(CreateUserSchema),
+  asyncHandler(UserController.createUser),
+);
 
 router.get(
   '/',
   AuthMiddleware.verifyToken,
   asyncHandler(UserController.getAllUsers),
 );
-// router.get(
-//   '/currentuser',
-//   // AuthMiddleware.verifyToken,
-//   asyncHandler(UserController.getCurrentUser),
-// );
+
+router.get(
+  '/currentuser',
+  AuthMiddleware.verifyToken,
+  asyncHandler(UserController.getCurrentUser),
+);
+
 router.get(
   '/:id',
   AuthMiddleware.verifyToken,
