@@ -7,7 +7,7 @@ export const getZodErrMessage = (payload: ZodError): string => {
   );
 };
 
-export const validateId = (id: unknown): number => {
-  const idSchema = z.coerce.number().positive();
+export const validateId = (id: unknown): string => {
+  const idSchema = z.string().trim().regex(/^[1-9]\d*$/, 'Id is not valid');
   return idSchema.parse(id);
 };

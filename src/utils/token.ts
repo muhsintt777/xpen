@@ -3,11 +3,11 @@ import { ENV } from '@/configs/env.js';
 import { CustomError } from './error.js';
 
 export interface AccessTokenData {
-  userId: number;
+  userId: string;
 }
 
 interface RefreshTokenData {
-  userId: number;
+  userId: string;
 }
 
 export class Token {

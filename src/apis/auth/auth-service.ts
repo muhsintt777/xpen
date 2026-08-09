@@ -56,7 +56,7 @@ export class AuthService {
     return Token.createAccessToken({ userId: user.id });
   }
 
-  static async logout(userID: number) {
+  static async logout(userID: string) {
     const validatedId = validateId(userID);
     const q = `
       UPDATE users
