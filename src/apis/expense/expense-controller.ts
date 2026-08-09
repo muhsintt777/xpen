@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import { ExpenseService } from '@/apis/expense/expense-service.js';
 
 export class ExpenseController {
-  static getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response) {
     const expenses = ExpenseService.getAllExpense();
-    return res.json(expenses);
+    res.json(expenses);
   }
 
   static async create(req: Request, res: Response) {
     const { category, amount } = req.body;
     ExpenseService.createExpense(category, amount);
-    return res.status(201).json({ message: 'Expense created' });
+    res.status(201).json({ message: 'Expense created' });
   }
 }
