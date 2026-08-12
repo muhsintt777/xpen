@@ -25,3 +25,9 @@ export const idReqParamSchema = z.object({
     id: IdSchema,
   }),
 });
+
+export const UnixDateSchema = z
+  .number()
+  .int('Date must be a whole Unix timestamp in seconds')
+  .min(0, 'Date must be a valid Unix timestamp')
+  .max(253402300799, 'Date must be a valid Unix timestamp');

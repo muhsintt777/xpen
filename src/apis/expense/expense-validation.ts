@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IdSchema } from '@/utils/common.js';
+import { IdSchema, UnixDateSchema } from '@/utils/common.js';
 
 const ExpenseTypeSchema = z.enum(['NEED', 'WANT', 'SAVE']);
 
@@ -15,7 +15,7 @@ const ExpenseBodySchema = z.object({
     .optional(),
   categoryId: IdSchema,
   type: ExpenseTypeSchema,
-  date: z.number().int('Date is not valid').positive('Date is not valid'),
+  date: UnixDateSchema,
 });
 
 export const CreateExpenseReqSchema = z.object({
