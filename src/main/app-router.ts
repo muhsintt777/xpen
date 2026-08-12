@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { expenseRouter } from '@/apis/expense/expense-router.js';
-import { userRouter } from '@/apis/user/user-routes.js';
+import { userRouter } from '@/apis/user/user-router.js';
 import { authRouter } from '@/apis/auth/auth-routes.js';
 import { categoryRouter } from '@/apis/category/category-router.js';
 
