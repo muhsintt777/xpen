@@ -12,8 +12,8 @@ async function startServer(): Promise<void> {
     app.listen(port, () => {
       ConsoleUtils.logSuccess(`Server is running on port ${port}`);
     });
-  } catch (error) {
-    ConsoleUtils.logError(`Failed to start the server`);
+  } catch (error: any) {
+    ConsoleUtils.logError(`Failed to start the server \n ${error.message}`);
     process.exit(1);
   }
 }

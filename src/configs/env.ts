@@ -11,16 +11,22 @@ export const ENV = {
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY as string,
 } as const;
 
-// todo: add zod validation
 export const validateEnv = (): void => {
   ConsoleUtils.logInfo('Validating environment variables...');
 
-  z.object({
-    PORT: z.number().int().positive(),
-    DB_URL: z.string().trim().nonempty(),
-    ACCESS_TOKEN_KEY: z.string().trim().nonempty(),
-    REFRESH_TOKEN_KEY: z.string().trim().nonempty(),
-  }).parse(ENV);
+  const err = z
+    .object({
+      PORT: z.number().int().positive(),
+      DB_URL: z.string().trim().nonempty(),
+      ACCESS_TOKEN_KEY: z.string().trim().nonempty(),
+      REFRESH_TOKEN_KEY: z.string().trim().nonempty(),
+    })
+    .safeParse(ENV).error;
+  if (err) {
+    throw new Error(
+      `Invalid environment variables \n ${JSON.stringify(z.treeifyError(err))}`,
+    );
+  }
 
   ConsoleUtils.logSuccess('Environment variables validated successfully.');
 };
