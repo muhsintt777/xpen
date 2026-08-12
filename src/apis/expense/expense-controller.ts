@@ -1,15 +1,36 @@
 import { Request, Response } from 'express';
-import { ExpenseService } from '@/apis/expense/expense-service.js';
+import { ApiResponse } from '@/utils/api-response.js';
+import { ExpenseService } from './expense-service.js';
+import { CreateExpenseParams, UpdateExpenseParams } from './expense-types.js';
 
 export class ExpenseController {
-  static async getAll(req: Request, res: Response) {
-    const expenses = ExpenseService.getAllExpense();
-    res.json(expenses);
+  static async createExpense(req: Request, res: Response) {
+    const payload: CreateExpenseParams = {
+      amount: req.body.amount as number,
+      note: req.body.note || (null as string | null),
+      categoryId: req.body.categoryId as string,
+      type: req.body.type,
+      date: req.body.date as number,
+      userId: req.token?.userId as string,
+    };
+    await ExpenseService.createExpense(payload);
+    res.status(201).json(new ApiResponse(null, 'Expense created'));
   }
 
-  static async create(req: Request, res: Response) {
-    const { category, amount } = req.body;
-    ExpenseService.createExpense(category, amount);
-    res.status(201).json({ message: 'Expense created' });
+  static async updateExpense(req: Request, res: Response) {
+    await ExpenseService.updateExpense(
+      req.token?.userId as string,
+      req.params.id as string,
+      req.body,
+    );
+    res.status(200).json(new ApiResponse(null, 'Expense updated'));
+  }
+
+  static async deleteExpense(req: Request, res: Response) {
+    await ExpenseService.deleteExpense(
+      req.token?.userId as string,
+      req.params.id as string,
+    );
+    res.status(200).json(new ApiResponse(null, 'Expense deleted'));
   }
 }

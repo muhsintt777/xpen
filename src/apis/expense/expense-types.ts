@@ -1,9 +1,9 @@
 export type ExpenseType = 'NEED' | 'WANT' | 'SAVE';
 
 export interface Expense {
-  id: number;
+  id: string;
   amount: number;
-  note: string;
+  note: string | null;
   categoryId: string;
   type: ExpenseType;
   date: number;
@@ -12,11 +12,11 @@ export interface Expense {
   updatedAt: number;
 }
 
-export interface CreateExpenseParams {
-  amount: number;
-  note: string;
-  categoryId: string;
-  type: ExpenseType;
-  date: number;
-  userId: string;
-}
+export interface CreateExpenseParams extends Omit<
+  Expense,
+  'id' | 'createdAt' | 'updatedAt'
+> {}
+
+export interface UpdateExpenseParams extends Partial<
+  Omit<Expense, 'userId' | 'id' | 'createdAt' | 'updatedAt'>
+> {}
