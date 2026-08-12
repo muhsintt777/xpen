@@ -45,5 +45,3 @@ try {
 } finally {
   await db.end();
 }
-
-// todo: add validation middleware to all req
