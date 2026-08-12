@@ -1,15 +1,35 @@
 import { z } from 'zod';
+import { IdSchema } from '@/utils/common.js';
 
-// export const CreateExpenseSchema = z.object({
-//   body: z.object({
-//     category: z
-//       .string()
-//       .trim()
-//       .min(1, 'Category is required')
-//       .max(50, 'Category must be less than 50 characters'),
-//     amount: z
-//       .number()
-//       .positive('Amount must be greater than 0')
-//       .max(9999999999.99, 'Amount must be less than 9999999999.99'),
-//   }),
-// });
+const ExpenseTypeSchema = z.enum(['NEED', 'WANT', 'SAVE']);
+
+const ExpenseBodySchema = z.object({
+  amount: z
+    .number()
+    .positive('Amount must be greater than 0')
+    .max(9999999999.99, 'Amount must be less than 9999999999.99'),
+  note: z
+    .string()
+    .trim()
+    .max(50, 'Note must be less than 50 characters')
+    .optional(),
+  categoryId: IdSchema,
+  type: ExpenseTypeSchema,
+  date: z.number().int('Date is not valid').positive('Date is not valid'),
+});
+
+export const CreateExpenseReqSchema = z.object({
+  body: ExpenseBodySchema,
+});
+
+export const UpdateExpenseReqSchema = z.object({
+  params: z.object({
+    id: IdSchema,
+  }),
+  body: ExpenseBodySchema.partial().refine(
+    (body) => Object.keys(body).length > 0,
+    {
+      message: 'At least one field is required',
+    },
+  ),
+});
