@@ -1,14 +1,13 @@
 import { db } from '@/configs/db.js';
-import { LoginSchema, RefreshTokenSchema } from './auth-validation.js';
 import { CustomError } from '@/utils/error.js';
 import { User } from '../user/user-types.js';
 import { HashUtils } from '@/utils/crypto.js';
 import { Token } from '@/utils/token.js';
-import { validateId } from '@/utils/common.js';
+import { LoginParams, RefreshTokenParams } from './auth-validation.js';
 
 export class AuthService {
-  static async login(params: unknown) {
-    const { email, password } = LoginSchema.parse(params);
+  static async login(params: LoginParams) {
+    const { email, password } = params;
     const q1 = `
       SELECT id, email, password 
       FROM users 
@@ -39,8 +38,8 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  static async refreshToken(params: unknown) {
-    const { refreshToken } = RefreshTokenSchema.parse(params);
+  static async refreshToken(params: RefreshTokenParams) {
+    const { refreshToken } = params;
     const { userId } = Token.verifyRefreshToken(refreshToken);
     const q = `
       SELECT id
@@ -57,12 +56,11 @@ export class AuthService {
   }
 
   static async logout(userID: string) {
-    const validatedId = validateId(userID);
     const q = `
       UPDATE users
       SET refresh_token = NULL
       WHERE id = $1;
     `;
-    await db.query(q, [validatedId]);
+    await db.query(q, [userID]);
   }
 }

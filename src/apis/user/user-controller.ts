@@ -15,7 +15,7 @@ export class UserController {
   }
 
   static async getUser(req: Request, res: Response) {
-    const result = await UserService.getUser(req.params.id);
+    const result = await UserService.getUser(req.params.id as string);
     res.status(200).json(new ApiResponse(result));
   }
 

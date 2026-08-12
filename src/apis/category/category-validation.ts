@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateCategorySchema = z.object({
+const CategoryBodySchema = z.object({
   name: z
     .string()
     .trim()
@@ -8,4 +8,27 @@ export const CreateCategorySchema = z.object({
     .max(50, 'Category name must be less than 50 characters'),
 });
 
+const CategoryParamsSchema = z.object({
+  id: z
+    .string()
+    .trim()
+    .regex(/^[1-9]\d*$/, 'Id is not valid'),
+});
+
+export const CreateCategorySchema = z.object({
+  body: CategoryBodySchema,
+});
+
 export const UpdateCategorySchema = CreateCategorySchema;
+
+export const CategoryIdSchema = z.object({
+  params: CategoryParamsSchema,
+});
+
+export const UpdateCategoryReqSchema = z.object({
+  body: CategoryBodySchema,
+  params: CategoryParamsSchema,
+});
+
+export type CreateCategoryParams = z.infer<typeof CategoryBodySchema>;
+export type UpdateCategoryParams = z.infer<typeof CategoryBodySchema>;

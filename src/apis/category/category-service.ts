@@ -1,9 +1,8 @@
 import { db } from '@/configs/db.js';
-import { validateId } from '@/utils/common.js';
 import { CustomError } from '@/utils/error.js';
 import {
-  CreateCategorySchema,
-  UpdateCategorySchema,
+  CreateCategoryParams,
+  UpdateCategoryParams,
 } from './category-validation.js';
 
 export class CategoryService {
@@ -13,26 +12,24 @@ export class CategoryService {
     return result;
   }
 
-  static async getCategory(id: unknown) {
-    const validatedId = validateId(id);
-    const q = `SELECT id, name FROM categories WHERE id = ${validatedId}`;
-    const result = (await db.query(q)).rows[0];
+  static async getCategory(id: string) {
+    const q = 'SELECT id, name FROM categories WHERE id = $1';
+    const result = (await db.query(q, [id])).rows[0];
     if (!result)
       throw new CustomError('RESOURCE_NOT_FOUND', 'Category not found');
     return result;
   }
 
-  static async createCategory(params: unknown) {
-    const { name } = CreateCategorySchema.parse(params);
+  static async createCategory(params: CreateCategoryParams) {
+    const { name } = params;
     const q = 'INSERT INTO categories (name) VALUES ($1)';
     await db.query(q, [name]);
   }
 
-  static async updateCategory(id: unknown, params: unknown) {
-    const validatedId = validateId(id);
-    const { name } = UpdateCategorySchema.parse(params);
+  static async updateCategory(id: string, params: UpdateCategoryParams) {
+    const { name } = params;
     const q = 'UPDATE categories SET name = $1 WHERE id = $2';
-    const res = (await db.query(q, [name, validatedId])).rowCount;
+    const res = (await db.query(q, [name, id])).rowCount;
     if (!res) throw new CustomError('RESOURCE_NOT_FOUND', 'Category not found');
   }
 }

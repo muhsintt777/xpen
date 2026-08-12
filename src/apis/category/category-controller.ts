@@ -9,7 +9,7 @@ export class CategoryController {
   }
 
   static async getCategory(req: Request, res: Response) {
-    const result = await CategoryService.getCategory(req.params.id);
+    const result = await CategoryService.getCategory(req.params.id as string);
     res.status(200).json(new ApiResponse(result));
   }
 
@@ -19,7 +19,7 @@ export class CategoryController {
   }
 
   static async updateCategory(req: Request, res: Response) {
-    await CategoryService.updateCategory(req.params.id, req.body);
+    await CategoryService.updateCategory(req.params.id as string, req.body);
     res.status(200).json(new ApiResponse(null, 'Category updated'));
   }
 }

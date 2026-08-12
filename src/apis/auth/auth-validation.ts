@@ -1,7 +1,7 @@
 import { REGEX } from '@/utils/constants.js';
 import { z } from 'zod';
 
-export const LoginSchema = z.object({
+const LoginBodySchema = z.object({
   email: z
     .string()
     .trim()
@@ -14,6 +14,17 @@ export const LoginSchema = z.object({
     .max(50, 'Password must be less than 50 characters'),
 });
 
-export const RefreshTokenSchema = z.object({
+const RefreshTokenBodySchema = z.object({
   refreshToken: z.string().trim(),
 });
+
+export const LoginSchema = z.object({
+  body: LoginBodySchema,
+});
+
+export const RefreshTokenSchema = z.object({
+  body: RefreshTokenBodySchema,
+});
+
+export type LoginParams = z.infer<typeof LoginBodySchema>;
+export type RefreshTokenParams = z.infer<typeof RefreshTokenBodySchema>;
