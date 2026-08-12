@@ -1,6 +1,6 @@
 import { db } from '@/configs/db.js';
 import { CustomError } from '@/utils/error.js';
-import { HashUtils } from '@/utils/crypto.js';
+import { HashUtils } from '@/utils/hash-utils.js';
 import { CreateUserParams } from './user-types.js';
 
 export class UserService {
