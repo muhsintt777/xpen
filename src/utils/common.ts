@@ -15,11 +15,13 @@ export const validateId = (id: unknown): string => {
   return idSchema.parse(id);
 };
 
-export const UserIdReqParamSchema = z.object({
+export const IdSchema = z
+  .string()
+  .trim()
+  .regex(/^[1-9]\d*$/, 'Id is not valid');
+
+export const idReqParamSchema = z.object({
   params: z.object({
-    id: z
-      .string()
-      .trim()
-      .regex(/^[1-9]\d*$/, 'Id is not valid'),
+    id: IdSchema,
   }),
 });
