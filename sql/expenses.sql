@@ -25,3 +25,5 @@ CREATE TABLE expenses (
 CREATE TRIGGER trg_expenses_updated_at
 BEFORE UPDATE ON expenses FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
+
+-- until dev
