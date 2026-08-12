@@ -25,6 +25,3 @@ export const LoginSchema = z.object({
 export const RefreshTokenSchema = z.object({
   body: RefreshTokenBodySchema,
 });
-
-export type LoginParams = z.infer<typeof LoginBodySchema>;
-export type RefreshTokenParams = z.infer<typeof RefreshTokenBodySchema>;

@@ -3,7 +3,7 @@ import { CustomError } from '@/utils/error.js';
 import { User } from '../user/user-types.js';
 import { HashUtils } from '@/utils/crypto.js';
 import { Token } from '@/utils/token.js';
-import { LoginParams, RefreshTokenParams } from './auth-validation.js';
+import { LoginParams } from './auth-types.js';
 
 export class AuthService {
   static async login(params: LoginParams) {
@@ -38,8 +38,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  static async refreshToken(params: RefreshTokenParams) {
-    const { refreshToken } = params;
+  static async refreshToken(refreshToken: string) {
     const { userId } = Token.verifyRefreshToken(refreshToken);
     const q = `
       SELECT id

@@ -6,14 +6,18 @@ import { ApiResponse } from '@/utils/api-response.js';
 
 export class AuthController {
   static async login(req: Request, res: Response) {
-    const result = await AuthService.login(req.body);
+    const payload = {
+      email: req.body.email as string,
+      password: req.body.password as string,
+    };
+    const result = await AuthService.login(payload);
     res.status(200).json(new ApiResponse(result, 'Login Success'));
   }
 
   static async refreshToken(req: Request, res: Response) {
-    const result = await AuthService.refreshToken({
-      refreshToken: req.body.refreshToken,
-    });
+    const result = await AuthService.refreshToken(
+      req.body.refreshToken as string,
+    );
     res.status(200).json(new ApiResponse(result));
   }
 
