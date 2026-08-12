@@ -9,9 +9,9 @@ export class UserController {
   }
 
   static async getCurrentUser(req: Request, res: Response) {
-    // const userID = req.token?.userId!;
-    // const result = await UserService.getUser(userID);
-    // res.status(200).json(new ApiResponse(result));
+    const userID = req.token?.userId!;
+    const result = await UserService.getUser(userID);
+    res.status(200).json(new ApiResponse(result));
   }
 
   static async getUser(req: Request, res: Response) {
