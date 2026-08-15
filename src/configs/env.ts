@@ -4,9 +4,13 @@ dotenv.config();
 import { ConsoleUtils } from '@/utils/console-utils.js';
 import z from 'zod';
 
+const parseBooleanEnv = (value: string | undefined): boolean =>
+  value?.trim().toLowerCase() === 'true' ? true : false;
+
 export const ENV = {
   PORT: Number(process.env.PORT),
   DB_URL: process.env.DB_URL as string,
+  DB_SSL: parseBooleanEnv(process.env.DB_SSL),
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY as string,
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY as string,
 } as const;
