@@ -4,6 +4,13 @@ import { ExpenseService } from './expense-service.js';
 import { CreateExpenseParams, UpdateExpenseParams } from './expense-types.js';
 
 export class ExpenseController {
+  static async getAllUserExpenses(req: Request, res: Response) {
+    const expenses = await ExpenseService.getAllUserExpenses(
+      req.token?.userId as string,
+    );
+    res.status(200).json(new ApiResponse(expenses, 'Expenses fetched'));
+  }
+
   static async createExpense(req: Request, res: Response) {
     const payload: CreateExpenseParams = {
       amount: req.body.amount as number,

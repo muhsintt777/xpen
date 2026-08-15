@@ -10,17 +10,18 @@ import {
 import { idReqParamSchema } from '@/utils/common.js';
 
 const router: Router = express.Router();
+router.use(AuthMiddleware.verifyToken);
+
+router.get('/currentuser', asyncHandler(ExpenseController.getAllUserExpenses));
 
 router.post(
   '/',
-  AuthMiddleware.verifyToken,
   validateReq(CreateExpenseReqSchema),
   asyncHandler(ExpenseController.createExpense),
 );
 
 router.put(
   '/:id',
-  AuthMiddleware.verifyToken,
   validateReq(UpdateExpenseReqSchema),
   asyncHandler(ExpenseController.updateExpense),
 );
@@ -28,7 +29,6 @@ router.put(
 router.delete(
   '/:id',
   validateReq(idReqParamSchema),
-  AuthMiddleware.verifyToken,
   asyncHandler(ExpenseController.deleteExpense),
 );
 

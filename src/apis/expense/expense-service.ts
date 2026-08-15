@@ -1,8 +1,32 @@
 import { db } from '@/configs/db.js';
 import { CustomError } from '@/utils/error.js';
-import { CreateExpenseParams, UpdateExpenseParams } from './expense-types.js';
+import {
+  CreateExpenseParams,
+  Expense,
+  UpdateExpenseParams,
+} from './expense-types.js';
 
 export class ExpenseService {
+  static async getAllUserExpenses(userId: string) {
+    const q = `
+      SELECT 
+        e.id, 
+        e.amount,
+        e.note, 
+        e.category_id AS categoryId,
+        e.type,
+        e.date,
+        e.user_id AS userId,
+        c.name AS categoryName
+      FROM expenses e
+      LEFT JOIN categories c ON e.category_id = c.id
+      WHERE user_id = $1
+      ORDER BY date DESC;
+    `;
+    const result = await db.query<Expense>(q, [userId]);
+    return result.rows;
+  }
+
   static async createExpense(params: CreateExpenseParams) {
     const { amount, note, categoryId, type, date, userId } = params;
     const q = `

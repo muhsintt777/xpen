@@ -5,6 +5,7 @@ export interface Expense {
   amount: number;
   note: string | null;
   categoryId: string;
+  categoryName: string;
   type: ExpenseType;
   date: number;
   userId: string;
@@ -14,9 +15,9 @@ export interface Expense {
 
 export interface CreateExpenseParams extends Omit<
   Expense,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'createdAt' | 'updatedAt' | 'categoryName'
 > {}
 
 export interface UpdateExpenseParams extends Partial<
-  Omit<Expense, 'userId' | 'id' | 'createdAt' | 'updatedAt'>
+  Omit<Expense, 'userId' | 'id' | 'createdAt' | 'updatedAt' | 'categoryName'>
 > {}
