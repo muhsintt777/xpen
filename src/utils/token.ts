@@ -13,7 +13,7 @@ interface RefreshTokenData {
 export class Token {
   static createAccessToken(payload: AccessTokenData) {
     const options: jwt.SignOptions = {
-      expiresIn: '5m',
+      expiresIn: '10m',
     };
     return jwt.sign(payload, ENV.ACCESS_TOKEN_KEY, options);
   }
@@ -30,7 +30,7 @@ export class Token {
 
   static createRefreshToken(payload: RefreshTokenData) {
     return jwt.sign(payload, ENV.REFRESH_TOKEN_KEY, {
-      expiresIn: '30m',
+      expiresIn: '1d',
     });
   }
 
