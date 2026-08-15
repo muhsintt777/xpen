@@ -8,8 +8,8 @@ import { errorHandler } from '@/main/error-handler.js';
 import { healthHandler } from './health-handler.js';
 
 const app: Express = express();
-app.use(morgan(':method :url :status'));
 app.use(helmet());
+app.use(morgan(':method :url :status'));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.get('/health', healthHandler);
