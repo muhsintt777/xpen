@@ -15,7 +15,7 @@ router.post(
 );
 
 router.get(
-  '/',
+  '/list',
   AuthMiddleware.verifyToken,
   asyncHandler(UserController.getAllUsers),
 );

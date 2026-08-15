@@ -14,6 +14,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.get('/health', healthHandler);
 app.use('/', appRouter);
+// todo: add not found handler for invalid routes
 app.use(errorHandler);
 
 export { app };
