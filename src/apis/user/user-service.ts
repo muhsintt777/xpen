@@ -1,18 +1,18 @@
 import { db } from '@/configs/db.js';
 import { CustomError } from '@/utils/error.js';
 import { HashUtils } from '@/utils/hash-utils.js';
-import { CreateUserParams } from './user-types.js';
+import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
 
 export class UserService {
   static async getAllUsers() {
     const q = 'SELECT id, fullname, email FROM users';
-    const result = (await db.query(q)).rows;
+    const result = (await db.query<UserWithoutSensitiveInfo>(q)).rows;
     return result;
   }
 
   static async getUser(id: string) {
     const q = 'SELECT id, fullname, email FROM users WHERE id = $1';
-    const result = (await db.query(q, [id])).rows[0];
+    const result = (await db.query<UserWithoutSensitiveInfo>(q, [id])).rows[0];
     if (!result) throw new CustomError('RESOURCE_NOT_FOUND', 'User not found');
     return result;
   }

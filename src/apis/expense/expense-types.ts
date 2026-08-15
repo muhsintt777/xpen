@@ -9,15 +9,15 @@ export interface Expense {
   type: ExpenseType;
   date: number;
   userId: string;
-  createdAt: number;
-  updatedAt: number;
+  // createdAt: number;
+  // updatedAt: number;
 }
 
 export interface CreateExpenseParams extends Omit<
   Expense,
-  'id' | 'createdAt' | 'updatedAt' | 'categoryName'
+  'id' | 'categoryName'
 > {}
 
 export interface UpdateExpenseParams extends Partial<
-  Omit<Expense, 'userId' | 'id' | 'createdAt' | 'updatedAt' | 'categoryName'>
+  Omit<Expense, 'userId' | 'id' | 'categoryName'>
 > {}

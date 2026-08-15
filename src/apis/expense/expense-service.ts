@@ -13,18 +13,23 @@ export class ExpenseService {
         e.id, 
         e.amount,
         e.note, 
-        e.category_id AS categoryId,
+        e.category_id AS "categoryId",
         e.type,
         e.date,
-        e.user_id AS userId,
-        c.name AS categoryName
+        c.name AS "categoryName"
       FROM expenses e
       LEFT JOIN categories c ON e.category_id = c.id
       WHERE user_id = $1
       ORDER BY date DESC;
     `;
-    const result = await db.query<Expense>(q, [userId]);
-    return result.rows;
+    const result = (
+      await db.query<Omit<Expense, 'userId'>>(q, [userId])
+    ).rows.map((row) => ({
+      ...row,
+      date: Number(row.date),
+      amount: Number(row.amount),
+    }));
+    return result;
   }
 
   static async createExpense(params: CreateExpenseParams) {
