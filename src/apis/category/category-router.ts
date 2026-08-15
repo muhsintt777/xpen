@@ -4,22 +4,22 @@ import { AuthMiddleware } from '@/middlewares/auth-middleware.js';
 import { asyncHandler } from '@/utils/async-handler.js';
 import { validateReq } from '@/middlewares/validation-middleware.js';
 import {
-  CreateCategoryReqSchema,
+  // CreateCategoryReqSchema,
   UpdateCategoryReqSchema,
 } from './category-validation.js';
 import { idReqParamSchema } from '@/utils/common.js';
 
 const router: Router = Router();
 
-router.post(
-  '/',
-  AuthMiddleware.verifyToken,
-  validateReq(CreateCategoryReqSchema),
-  asyncHandler(CategoryController.createCategory),
-);
+// router.post(
+//   '/',
+//   AuthMiddleware.verifyToken,
+//   validateReq(CreateCategoryReqSchema),
+//   asyncHandler(CategoryController.createCategory),
+// );
 
 router.get(
-  '/',
+  '/list',
   AuthMiddleware.verifyToken,
   asyncHandler(CategoryController.getAllCategories),
 );
