@@ -7,6 +7,19 @@ type ValidationSchema = z.ZodObject<{
   query?: z.ZodType;
 }>;
 
+const assignReqProperty = <K extends 'body' | 'params' | 'query'>(
+  req: Request,
+  key: K,
+  value: Request[K],
+) => {
+  Object.defineProperty(req, key, {
+    value,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+};
+
 export const validateReq =
   (schema: ValidationSchema) =>
   (req: Request, _res: Response, next: NextFunction) => {
@@ -17,14 +30,20 @@ export const validateReq =
     });
 
     if (validatedReq.body) {
-      req.body = validatedReq.body;
+      assignReqProperty(req, 'body', validatedReq.body);
     }
     if (validatedReq.params) {
-      req.params = validatedReq.params as Request['params'];
+      assignReqProperty(
+        req,
+        'params',
+        validatedReq.params as Request['params'],
+      );
     }
     if (validatedReq.query) {
-      req.query = validatedReq.query as Request['query'];
+      assignReqProperty(req, 'query', validatedReq.query as Request['query']);
     }
 
     next();
   };
+
+// todo: find better way to override req

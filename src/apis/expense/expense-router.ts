@@ -7,12 +7,16 @@ import {
   CreateExpenseReqSchema,
   UpdateExpenseReqSchema,
 } from './expense-validation.js';
-import { idReqParamSchema } from '@/utils/common.js';
+import { idReqParamSchema, PaginationSchema } from '@/utils/common.js';
 
 const router: Router = express.Router();
 router.use(AuthMiddleware.verifyToken);
 
-router.get('/currentuser', asyncHandler(ExpenseController.getAllUserExpenses));
+router.get(
+  '/currentuser',
+  validateReq(PaginationSchema),
+  asyncHandler(ExpenseController.getAllUserExpenses),
+);
 
 router.post(
   '/',

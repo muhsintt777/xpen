@@ -31,3 +31,11 @@ export const UnixDateSchema = z
   .int('Date must be a whole Unix timestamp in seconds')
   .min(0, 'Date must be a valid Unix timestamp')
   .max(253402300799, 'Date must be a valid Unix timestamp');
+
+export const PaginationSchema = z.object({
+  query: z.object({
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+
+    cursor: z.string().optional(),
+  }),
+});

@@ -2,11 +2,13 @@ import { Request, Response } from 'express';
 import { ApiResponse } from '@/utils/api-response.js';
 import { ExpenseService } from './expense-service.js';
 import { CreateExpenseParams, UpdateExpenseParams } from './expense-types.js';
+import { Pagination } from '@/types/common-types.js';
 
 export class ExpenseController {
   static async getAllUserExpenses(req: Request, res: Response) {
     const expenses = await ExpenseService.getAllUserExpenses(
       req.token?.userId as string,
+      req.query as unknown as Pagination,
     );
     res.status(200).json(new ApiResponse(expenses, 'Expenses fetched'));
   }

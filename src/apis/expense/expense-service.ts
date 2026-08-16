@@ -5,9 +5,14 @@ import {
   Expense,
   UpdateExpenseParams,
 } from './expense-types.js';
+import { Pagination } from '@/types/common-types.js';
 
 export class ExpenseService {
-  static async getAllUserExpenses(userId: string) {
+  static async getAllUserExpenses(userId: string, pagination: Pagination) {
+    let cursorClause = '';
+    if (pagination.cursor) {
+      cursorClause = `AND date < ${pagination.cursor}`;
+    }
     const q = `
       SELECT 
         e.id, 
@@ -20,10 +25,12 @@ export class ExpenseService {
       FROM expenses e
       LEFT JOIN categories c ON e.category_id = c.id
       WHERE user_id = $1
-      ORDER BY date DESC;
+      ${cursorClause}
+      ORDER BY date DESC
+      LIMIT $2;
     `;
     const result = (
-      await db.query<Omit<Expense, 'userId'>>(q, [userId])
+      await db.query<Omit<Expense, 'userId'>>(q, [userId, pagination.limit])
     ).rows.map((row) => ({
       ...row,
       date: Number(row.date),
