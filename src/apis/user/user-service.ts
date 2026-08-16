@@ -2,12 +2,33 @@ import { db } from '@/configs/db.js';
 import { CustomError } from '@/utils/error.js';
 import { HashUtils } from '@/utils/hash-utils.js';
 import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
+import { Pagination } from '@/types/common-types.js';
 
 export class UserService {
-  static async getAllUsers() {
-    const q = 'SELECT id, fullname, email FROM users';
-    const result = (await db.query<UserWithoutSensitiveInfo>(q)).rows;
-    return result;
+  static async getAllUsers(paginationParams: Pagination) {
+    let cursorClause = '';
+    if (paginationParams.cursor) {
+      cursorClause = `WHERE id > ${paginationParams.cursor}`;
+    }
+    const q = `
+      SELECT id, fullname, email 
+      FROM users
+      ${cursorClause}
+      LIMIT $1
+    `;
+    const result = (
+      await db.query<UserWithoutSensitiveInfo>(q, [paginationParams.limit + 1])
+    ).rows;
+    const hasNextPage = result.length === paginationParams.limit + 1;
+    if (hasNextPage) result.pop();
+    const nextCursor = hasNextPage
+      ? result[paginationParams.limit - 1]?.id
+      : '';
+
+    return {
+      items: result,
+      pagination: { limit: paginationParams.limit, nextCursor, hasNextPage },
+    };
   }
 
   static async getUser(id: string) {

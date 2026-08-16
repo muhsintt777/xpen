@@ -36,14 +36,18 @@ export class ExpenseService {
       date: Number(row.date),
       amount: Number(row.amount),
     }));
+
     const hasNextPage = result.length === pagination.limit + 1;
     if (hasNextPage) result.pop();
-    const nextCursor = hasNextPage ? result[pagination.limit - 1]?.date : '';
+    const nextCursor = hasNextPage
+      ? result[pagination.limit - 1]?.date?.toString()
+      : '';
     const paginationDetails = {
       limit: pagination.limit,
       nextCursor,
       hasNextPage,
     };
+
     return { items: result, pagination: paginationDetails };
   }
 
