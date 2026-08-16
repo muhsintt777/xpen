@@ -21,3 +21,5 @@ export { app };
 
 // todo: >> Unhandled error:
 // error: duplicate key value violates unique constraint "users_email_key"
+
+// todo: fix eslint issue

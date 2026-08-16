@@ -5,6 +5,7 @@ import { ConsoleUtils } from '@/utils/console-utils.js';
 export const db = new Pool({
   connectionString: ENV.DB_URL,
   ssl: ENV.DB_SSL === true ? { rejectUnauthorized: false } : false,
+  max: 10,
 });
 
 export async function connectDb(): Promise<void> {
