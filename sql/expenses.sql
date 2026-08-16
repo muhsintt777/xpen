@@ -27,3 +27,4 @@ BEFORE UPDATE ON expenses FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
 -- until dev
+CREATE INDEX idx_expenses_user_id ON expenses (user_id);

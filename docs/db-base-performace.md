@@ -37,3 +37,25 @@ WHERE
 - Shared buffer hits: `143`
 - Planning time: `0.383 ms`
 - Execution time: `~0.879 ms`
+
+## 100K Expenses - user_id Index
+
+### Without Index
+
+- Scan: `Seq Scan`
+- Rows returned: `1,000`
+- Rows removed: `99,000`
+- Shared buffers: `1,429`
+- Execution time: `5.901 ms`
+
+### With `idx_expenses_user_id`
+
+- Scan: `Bitmap Index Scan` + `Bitmap Heap Scan`
+- Rows returned: `1,000`
+- Heap blocks: `15`
+- Shared buffers: `18 hit + 2 read`
+- Execution time: `0.170 ms`
+
+### Improvement
+
+- Execution time: ~34.7x faster
