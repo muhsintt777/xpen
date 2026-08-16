@@ -30,13 +30,21 @@ export class ExpenseService {
       LIMIT $2;
     `;
     const result = (
-      await db.query<Omit<Expense, 'userId'>>(q, [userId, pagination.limit])
+      await db.query<Omit<Expense, 'userId'>>(q, [userId, pagination.limit + 1])
     ).rows.map((row) => ({
       ...row,
       date: Number(row.date),
       amount: Number(row.amount),
     }));
-    return result;
+    const hasNextPage = result.length === pagination.limit + 1;
+    if (hasNextPage) result.pop();
+    const nextCursor = hasNextPage ? result[pagination.limit - 1]?.date : '';
+    const paginationDetails = {
+      limit: pagination.limit,
+      nextCursor,
+      hasNextPage,
+    };
+    return { items: result, pagination: paginationDetails };
   }
 
   static async createExpense(params: CreateExpenseParams) {
