@@ -28,3 +28,7 @@ EXECUTE FUNCTION update_updated_at_column ();
 
 -- until dev
 CREATE INDEX idx_expenses_user_id ON expenses (user_id);
+
+DROP INDEX IF EXISTS idx_expenses_user_id;
+
+CREATE INDEX idx_expenses_user_date ON expenses (user_id, date DESC);
