@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ENV } from '@/configs/env.js';
+import { ENV } from '#/configs/env.js';
 import { CustomError } from './error.js';
 
 export interface AccessTokenData {

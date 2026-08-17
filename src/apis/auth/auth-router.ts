@@ -1,8 +1,8 @@
-import { asyncHandler } from '@/utils/async-handler.js';
+import { asyncHandler } from '#/utils/async-handler.js';
 import { Router } from 'express';
 import { AuthController } from './auth-controller.js';
-import { AuthMiddleware } from '@/middlewares/auth-middleware.js';
-import { validateReq } from '@/middlewares/validation-middleware.js';
+import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
+import { validateReq } from '#/middlewares/validation-middleware.js';
 import { LoginSchema, RefreshTokenSchema } from './auth-validation.js';
 
 const router: Router = Router();

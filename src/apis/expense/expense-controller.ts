@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { ApiResponse } from '@/utils/api-response.js';
+import { ApiResponse } from '#/utils/api-response.js';
 import { ExpenseService } from './expense-service.js';
 import { CreateExpenseParams, UpdateExpenseParams } from './expense-types.js';
-import { Pagination } from '@/types/common-types.js';
+import { Pagination } from '#/types/common-types.js';
 
 export class ExpenseController {
   static async getAllUserExpenses(req: Request, res: Response) {

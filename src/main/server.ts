@@ -1,7 +1,7 @@
-import { ENV, validateEnv } from '@/configs/env.js';
-import { app } from '@/main/app.js';
-import { connectDb } from '@/configs/db.js';
-import { ConsoleUtils } from '@/utils/console-utils.js';
+import { ENV, validateEnv } from '#/configs/env.js';
+import { app } from '#/main/app.js';
+import { connectDb } from '#/configs/db.js';
+import { ConsoleUtils } from '#/utils/console-utils.js';
 
 async function startServer(): Promise<void> {
   try {

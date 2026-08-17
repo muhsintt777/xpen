@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { REGEX } from '@/utils/constants.js';
+import { REGEX } from '#/utils/constants.js';
 
 export const CreateUserSchema = z.object({
   body: z.object({

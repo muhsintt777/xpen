@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { CategoryController } from './category-controller.js';
-import { AuthMiddleware } from '@/middlewares/auth-middleware.js';
-import { asyncHandler } from '@/utils/async-handler.js';
-import { validateReq } from '@/middlewares/validation-middleware.js';
+import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
+import { asyncHandler } from '#/utils/async-handler.js';
+import { validateReq } from '#/middlewares/validation-middleware.js';
 import {
   // CreateCategoryReqSchema,
   UpdateCategoryReqSchema,
 } from './category-validation.js';
-import { idReqParamSchema } from '@/utils/common.js';
+import { idReqParamSchema } from '#/utils/common.js';
 
 const router: Router = Router();
 

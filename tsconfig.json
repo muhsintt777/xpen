@@ -1,44 +1,37 @@
 {
   "compilerOptions": {
-    /* Language */
     "target": "ES2023",
     "lib": ["ES2023"],
 
-    /* Modules */
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+
     "paths": {
-      "@/*": ["./src/*"]
+      "#/*": ["./src/*"]
     },
 
-    /* Project */
     "rootDir": "./src",
     "outDir": "./dist",
 
-    /* Type Checking */
     "strict": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
-    /* Module Interop */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    /* Output */
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "removeComments": false,
 
-    /* Performance */
     "skipLibCheck": true,
 
-    /* Misc */
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "src/types//*"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

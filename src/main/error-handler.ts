@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { getZodErrMessage } from '@/utils/common.js';
-import { CustomError } from '@/utils/error.js';
-import { ApiResponse } from '@/utils/api-response.js';
-import { ConsoleUtils } from '@/utils/console-utils.js';
+import { getZodErrMessage } from '#/utils/common.js';
+import { CustomError } from '#/utils/error.js';
+import { ApiResponse } from '#/utils/api-response.js';
+import { ConsoleUtils } from '#/utils/console-utils.js';
 
 export const errorHandler = (
   err: Error,

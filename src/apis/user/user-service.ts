@@ -1,8 +1,8 @@
-import { db } from '@/configs/db.js';
-import { CustomError } from '@/utils/error.js';
-import { HashUtils } from '@/utils/hash-utils.js';
+import { db } from '#/configs/db.js';
+import { CustomError } from '#/utils/error.js';
+import { HashUtils } from '#/utils/hash-utils.js';
 import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
-import { Pagination } from '@/types/common-types.js';
+import { Pagination } from '#/types/common-types.js';
 
 export class UserService {
   static async getAllUsers(paginationParams: Pagination) {

@@ -1,11 +1,11 @@
-import { db } from '@/configs/db.js';
-import { CustomError } from '@/utils/error.js';
+import { db } from '#/configs/db.js';
+import { CustomError } from '#/utils/error.js';
 import {
   CreateExpenseParams,
   Expense,
   UpdateExpenseParams,
 } from './expense-types.js';
-import { Pagination } from '@/types/common-types.js';
+import { Pagination } from '#/types/common-types.js';
 
 export class ExpenseService {
   static async getAllUserExpenses(userId: string, pagination: Pagination) {

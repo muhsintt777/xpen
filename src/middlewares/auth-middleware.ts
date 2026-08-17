@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { CustomError } from '@/utils/error.js';
-import { Token } from '@/utils/token.js';
+import { CustomError } from '#/utils/error.js';
+import { Token } from '#/utils/token.js';
 
 export class AuthMiddleware {
   static verifyToken(req: Request, _res: Response, next: NextFunction) {

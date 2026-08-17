@@ -2,9 +2,9 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { appRouter } from '@/main/app-router.js';
-import { corsOptions } from '@/configs/cors.js';
-import { errorHandler } from '@/main/error-handler.js';
+import { appRouter } from '#/main/app-router.js';
+import { corsOptions } from '#/configs/cors.js';
+import { errorHandler } from '#/main/error-handler.js';
 import { healthHandler } from './health-handler.js';
 
 const app: Express = express();

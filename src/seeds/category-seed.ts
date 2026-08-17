@@ -1,5 +1,5 @@
-import { db } from '@/configs/db.js';
-import { ConsoleUtils } from '@/utils/console-utils.js';
+import { db } from '#/configs/db.js';
+import { ConsoleUtils } from '#/utils/console-utils.js';
 
 const categories = [
   'Food',

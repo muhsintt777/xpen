@@ -1,4 +1,4 @@
-import { IdSchema } from '@/utils/common.js';
+import { IdSchema } from '#/utils/common.js';
 import { z } from 'zod';
 
 export const CreateCategoryReqSchema = z.object({
