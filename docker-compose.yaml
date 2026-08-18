@@ -1,0 +1,25 @@
+services:
+  api:
+    image: xpen-server:latest
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - '3500:3500'
+
+    cpus: 2
+    mem_limit: 1g
+
+    env_file:
+      - .env
+
+    networks:
+      - xpen-network
+
+networks:
+  xpen-network:
+    name: xpen-network
+    external: true
+    driver: bridge
