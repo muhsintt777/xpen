@@ -31,17 +31,11 @@ export class ExpenseService {
     `;
     const result = (
       await db.query<Omit<Expense, 'userId'>>(q, [userId, pagination.limit + 1])
-    ).rows.map((row) => ({
-      ...row,
-      date: Number(row.date),
-      amount: Number(row.amount),
-    }));
+    ).rows;
 
     const hasNextPage = result.length === pagination.limit + 1;
     if (hasNextPage) result.pop();
-    const nextCursor = hasNextPage
-      ? result[pagination.limit - 1]?.date?.toString()
-      : '';
+    const nextCursor = hasNextPage ? result[pagination.limit - 1]?.date : '';
     const paginationDetails = {
       limit: pagination.limit,
       nextCursor,

@@ -20,8 +20,7 @@ export class Token {
 
   static verifyAccessToken(token: string) {
     try {
-      const decoded = jwt.verify(token, ENV.ACCESS_TOKEN_KEY);
-      return decoded as AccessTokenData;
+      return jwt.verify(token, ENV.ACCESS_TOKEN_KEY) as AccessTokenData;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       throw new CustomError('AUTH_TOKEN_EXPIRED', 'Token expired');
