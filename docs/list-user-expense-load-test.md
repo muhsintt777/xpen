@@ -1,34 +1,33 @@
-# List User Expenses API Load Test Results
+# List User Expenses API Load Test
+
+## Configuration
+
+- Endpoint: `GET /expense/currentuser?limit=20`
+- Node.js: **2 CPU / 1 GB RAM**
+- Database pool: **10 connections**
+- Test duration: **60 seconds**
+- Error threshold: **<1%**
+- Latency threshold: **p95 <500 ms**
 
 ## Results
 
-| VUs |    Throughput | Avg Latency | p95 Latency | Error Rate |      CPU |  RAM |
-| --: | ------------: | ----------: | ----------: | ---------: | -------: | ---: |
-|  50 |     199 req/s |     4.85 ms |    12.89 ms |         0% |   20–30% | 3–4% |
-| 100 |     435 req/s |    13.83 ms |    68.09 ms |         0% |  40–104% | 4–6% |
-| 200 | **991 req/s** |    61.09 ms |   115.26 ms |         0% |    ~100% | 4–6% |
-| 300 |     768 req/s |   212.06 ms |   359.09 ms |         0% | 100–130% | 7–8% |
+|     VUs |      Throughput |  Avg Latency |   p95 Latency | Error Rate |
+| ------: | --------------: | -----------: | ------------: | ---------: |
+| **200** | **1,392 req/s** | **19.37 ms** |  **57.38 ms** |     **0%** |
+| **300** | **1,441 req/s** |  **72.9 ms** | **167.01 ms** |     **0%** |
 
 ## Key Findings
 
-- Throughput increased from **199 req/s at 50 VUs** to **991 req/s at 200 VUs**.
-- **200 VUs** produced the highest throughput at approximately **991 req/s**.
-- CPU reached approximately **100% at 200 VUs**.
-- Increasing to **300 VUs** reduced throughput to **768 req/s**.
-- At 300 VUs, p95 latency increased to **359.09 ms**.
-- All tests maintained a **0% error rate**.
-- RAM remained low compared with CPU usage.
+- **200 VUs:** ~1,392 req/s with 57.38 ms p95.
+- **300 VUs:** ~1,441 req/s with 167.01 ms p95.
+- Both tests maintained **0% errors**.
+- Increasing from 200 to 300 VUs increased throughput by only **~3.5%**.
+- p95 latency increased significantly from **57 ms → 167 ms**.
+- **200 VUs is the preferred operating point** because it provides nearly the same throughput with substantially lower latency.
+- 300 VUs demonstrates that the API can handle higher concurrency while remaining below the 500 ms latency threshold.
 
-## Capacity Point
+## Current Baseline
 
-The current Node.js setup reaches its practical capacity around **200 VUs**.
+**~1,392 req/s at 200 VUs, 57 ms p95, and 0% errors.**
 
-At 200 VUs:
-
-- Throughput: **~991 req/s**
-- p95 latency: **115.26 ms**
-- Error rate: **0%**
-- CPU: **~100%**
-- RAM: **4–6%**
-
-Increasing concurrency beyond this point increases latency and reduces throughput, indicating **CPU saturation** as the current limiting resource.
+The API demonstrated a maximum tested throughput of approximately **1,441 req/s at 300 VUs** with **167 ms p95 latency**.
