@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { appRouter } from '#/main/app-router.js';
 import { corsOptions } from '#/configs/cors.js';
 import { errorHandler } from '#/main/error-handler.js';
+import { notFoundRouteHandler } from '#/main/not-found-handler.js';
 import { loggerMiddleWare } from '#/middlewares/logger-middleware.js';
 import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
 import { healthHandler } from './health-handler.js';
@@ -17,7 +18,7 @@ app.use(loggerMiddleWare);
 app.use(RateLimitMiddleware.default);
 app.get('/health', healthHandler);
 app.use('/', appRouter);
-// todo: add not found handler for invalid routes
+app.use(notFoundRouteHandler);
 app.use(errorHandler);
 
 export { app };
