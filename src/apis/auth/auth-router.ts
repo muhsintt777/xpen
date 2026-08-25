@@ -3,12 +3,12 @@ import { Router } from 'express';
 import { AuthController } from './auth-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
 import { validateReq } from '#/middlewares/validation-middleware.js';
+import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
 import { LoginSchema, RefreshTokenSchema } from './auth-validation.js';
 
 const router: Router = Router();
 
-// todo: enable rate limit middleware for auth routes
-// router.use(RateLimitMiddleware.auth);
+router.use(RateLimitMiddleware.auth);
 
 router.post(
   '/login',

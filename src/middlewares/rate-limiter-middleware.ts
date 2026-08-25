@@ -18,7 +18,7 @@ export class RateLimitMiddleware {
   static default = rateLimit({
     ...this.config,
     windowMs: this.WINDOW_MS_15_MINUTES,
-    max: 200,
+    max: 500,
   });
 
   static auth = rateLimit({
@@ -27,5 +27,3 @@ export class RateLimitMiddleware {
     max: 20,
   });
 }
-
-// todo: add rate limiter
