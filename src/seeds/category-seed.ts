@@ -1,5 +1,5 @@
 import { db } from '#/configs/db.js';
-import { ConsoleUtils } from '#/utils/console-utils.js';
+import { logger } from '#/configs/logger.js';
 
 const categories = [
   'Food',
@@ -19,7 +19,7 @@ const categories = [
 ];
 
 async function seedCategories(): Promise<void> {
-  ConsoleUtils.logInfo('Seeding categories...');
+  logger.info('Seeding categories...');
 
   const q = `
     INSERT INTO categories (name)
@@ -33,15 +33,13 @@ async function seedCategories(): Promise<void> {
   `;
 
   const result = await db.query(q, [categories]);
-  ConsoleUtils.logSuccess(
-    `Categories seeded. Inserted ${result.rowCount} rows.`,
-  );
+  logger.info(`Categories seeded. Inserted ${result.rowCount} rows.`);
 }
 
 try {
   await seedCategories();
 } catch (err) {
-  ConsoleUtils.logError('Failed to seed categories');
+  logger.error({ error: err }, 'Failed to seed categories');
 } finally {
   await db.end();
 }

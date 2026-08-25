@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import { ENV } from '#/configs/env.js';
-import { ConsoleUtils } from '#/utils/console-utils.js';
+import { logger } from '#/configs/logger.js';
 
 export const db = new Pool({
   connectionString: ENV.DB_URL,
@@ -9,18 +9,18 @@ export const db = new Pool({
 });
 
 export async function connectDb(): Promise<void> {
-  ConsoleUtils.logInfo('Connecting to the database...');
+  logger.info('Connecting to the database...');
   const client = await db.connect();
   try {
     await client.query('SELECT NOW()');
   } finally {
     client.release();
   }
-  ConsoleUtils.logSuccess('Database connection established successfully');
+  logger.info('Database connection established successfully');
 }
 
 export async function disconnectDb(): Promise<void> {
-  ConsoleUtils.logInfo('Disconnecting from the database...');
+  logger.info('Disconnecting from the database...');
   await db.end();
-  ConsoleUtils.logSuccess('Database connection closed successfully');
+  logger.info('Database connection closed successfully');
 }

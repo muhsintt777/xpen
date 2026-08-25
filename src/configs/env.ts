@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { ConsoleUtils } from '#/utils/console-utils.js';
+import { logger } from '#/configs/logger.js';
 import z from 'zod';
 
 const parseBooleanEnv = (value: string | undefined): boolean =>
@@ -16,7 +16,7 @@ export const ENV = {
 } as const;
 
 export const validateEnv = (): void => {
-  ConsoleUtils.logInfo('Validating environment variables...');
+  logger.info('Validating environment variables...');
 
   const err = z
     .object({
@@ -32,5 +32,5 @@ export const validateEnv = (): void => {
     );
   }
 
-  ConsoleUtils.logSuccess('Environment variables validated successfully.');
+  logger.info('Environment variables validated successfully.');
 };
