@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IdSchema, UnixDateSchema } from '#/utils/common.js';
+import { IdSchema, UnixDateSchema } from '#/validation/schemas.js';
 
 const ExpenseTypeSchema = z.enum(['NEED', 'WANT', 'SAVE']);
 

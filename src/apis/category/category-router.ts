@@ -7,7 +7,7 @@ import {
   // CreateCategoryReqSchema,
   UpdateCategoryReqSchema,
 } from './category-validation.js';
-import { idReqParamSchema } from '#/utils/common.js';
+import { idReqParamSchema } from '#/validation/schemas.js';
 
 const router: Router = Router();
 

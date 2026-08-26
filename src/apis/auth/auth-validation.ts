@@ -1,4 +1,4 @@
-import { REGEX } from '#/utils/constants.js';
+import { REGEX } from '#/validation/regex.js';
 import { z } from 'zod';
 
 const LoginBodySchema = z.object({
