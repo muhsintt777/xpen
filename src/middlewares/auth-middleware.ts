@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CustomError } from '#/utils/error.js';
+import { CustomError } from '#/errors/app-error.js';
 import { AuthTokenService } from '#/security/auth-token-service.js';
 
 export class AuthMiddleware {

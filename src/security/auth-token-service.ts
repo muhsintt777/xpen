@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { ENV } from '#/configs/env.js';
-import { CustomError } from '../utils/error.js';
+import { CustomError } from '../errors/app-error.js';
 
 export interface AccessTokenData {
   userId: string;

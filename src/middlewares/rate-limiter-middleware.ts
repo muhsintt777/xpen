@@ -1,5 +1,5 @@
 import rateLimit, { Options, ipKeyGenerator } from 'express-rate-limit';
-import { CustomError } from '#/utils/error.js';
+import { CustomError } from '#/errors/app-error.js';
 
 export class RateLimitMiddleware {
   private static readonly WINDOW_MS_15_MINUTES = 15 * 60 * 1000;

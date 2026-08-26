@@ -1,5 +1,5 @@
 import { db } from '#/configs/db.js';
-import { CustomError } from '#/utils/error.js';
+import { CustomError } from '#/errors/app-error.js';
 import { User } from '../user/user-types.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
 import { AuthTokenService } from '#/security/auth-token-service.js';

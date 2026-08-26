@@ -1,5 +1,5 @@
 import { db } from '#/configs/db.js';
-import { CustomError } from '#/utils/error.js';
+import { CustomError } from '#/errors/app-error.js';
 import { Category } from './category-types.js';
 
 export class CategoryService {

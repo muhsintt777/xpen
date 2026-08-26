@@ -1,5 +1,5 @@
 import { db } from '#/configs/db.js';
-import { CustomError } from '#/utils/error.js';
+import { CustomError } from '#/errors/app-error.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
 import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
 import { Pagination } from '#/types/common-types.js';

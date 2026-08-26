@@ -18,7 +18,10 @@ export const ERROR_TYPE = {
   EXTERNAL_SERVICE_ERROR: 'EXTERNAL_SERVICE_ERROR',
 } as const;
 
-const ERROR_STATUS_CODE: Record<(typeof ERROR_TYPE)[keyof typeof ERROR_TYPE], number> = {
+const ERROR_STATUS_CODE: Record<
+  (typeof ERROR_TYPE)[keyof typeof ERROR_TYPE],
+  number
+> = {
   BAD_REQUEST: 400,
 
   AUTH_TOKEN_EXPIRED: 401,
