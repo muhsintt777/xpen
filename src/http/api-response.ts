@@ -1,6 +1,8 @@
 import type { ErrorType } from '../errors/app-error.js';
 import { ERROR_STATUS_CODE } from '../errors/app-error.js';
 import { DateUtils } from '../utils/date-utils.js';
+import type { SuccessType } from './response-types.js';
+import { SUCCESS_STATUS_CODE } from './response-types.js';
 
 /**
  * Standard API response wrapper for all HTTP responses
@@ -34,22 +36,24 @@ export class ApiResponse<T = unknown> {
    * @param options - Response options (optional)
    * @param options.data - The response payload to return to client (optional, defaults to null)
    * @param options.message - Optional custom message (defaults to 'Success')
-   * @param options.statusCode - Optional custom HTTP status code (defaults to 200)
-   * @returns ApiResponse instance with success=true and statusCode=200
+   * @param options.successType - Success type: OK, CREATED, ACCEPTED, NO_CONTENT (defaults to OK)
+   * @returns ApiResponse instance with success=true and appropriate HTTP status code
    * @example
    * ApiResponse.success()
    * ApiResponse.success({ data: { id: 1, name: 'John' } })
-   * ApiResponse.success({ data: user, message: 'User created successfully' })
+   * ApiResponse.success({ data: user, successType: 'CREATED', message: 'User created' })
    */
   static success<T>(options?: {
     data?: T;
-    statusCode?: number;
+    successType?: SuccessType;
     message?: string;
   }): ApiResponse<T | null> {
+    const successType = options?.successType ?? 'OK';
+    const statusCode = SUCCESS_STATUS_CODE[successType];
     return new ApiResponse(
       options?.data ?? null,
       options?.message ?? 'Success',
-      options?.statusCode ?? 200,
+      statusCode,
       null,
     );
   }
