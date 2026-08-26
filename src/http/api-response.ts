@@ -34,6 +34,7 @@ export class ApiResponse<T = unknown> {
    * @param options - Response options (optional)
    * @param options.data - The response payload to return to client (optional, defaults to null)
    * @param options.message - Optional custom message (defaults to 'Success')
+   * @param options.statusCode - Optional custom HTTP status code (defaults to 200)
    * @returns ApiResponse instance with success=true and statusCode=200
    * @example
    * ApiResponse.success()
@@ -42,12 +43,13 @@ export class ApiResponse<T = unknown> {
    */
   static success<T>(options?: {
     data?: T;
+    statusCode?: number;
     message?: string;
   }): ApiResponse<T | null> {
     return new ApiResponse(
       options?.data ?? null,
       options?.message ?? 'Success',
-      200,
+      options?.statusCode ?? 200,
       null,
     );
   }
@@ -56,7 +58,7 @@ export class ApiResponse<T = unknown> {
    * Create an error response
    * @param options - Error response options
    * @param options.errorType - The error type (from ERROR_TYPE enum)
-   * @param options.message - Error message to send to client
+   * @param options.message - Error message to send to client (optional, defaults to 'Error')
    * @returns ApiResponse instance with success=false and appropriate HTTP status code
    * @example
    * ApiResponse.error({ errorType: 'RESOURCE_NOT_FOUND', message: 'User not found' })
@@ -64,12 +66,12 @@ export class ApiResponse<T = unknown> {
    */
   static error(options: {
     errorType: ErrorType;
-    message: string;
+    message?: string;
   }): ApiResponse<null> {
     const statusCode = ERROR_STATUS_CODE[options.errorType];
     return new ApiResponse(
       null,
-      options.message,
+      options.message ?? 'Error',
       statusCode,
       options.errorType,
     );

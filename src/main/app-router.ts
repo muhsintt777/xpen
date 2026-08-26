@@ -11,5 +11,3 @@ router.use('/expense', expenseRouter);
 router.use('/category', categoryRouter);
 
 export { router as appRouter };
-
-// todo: merge api utils
