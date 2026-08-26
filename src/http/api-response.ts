@@ -1,12 +1,14 @@
-export class ApiResponse {
+import type { ErrorType } from '../errors/app-error.js';
+
+export class ApiResponse<T = unknown> {
   message: string;
-  errorType: string | null;
-  data: any;
+  errorType: ErrorType | null;
+  data: T;
 
   constructor(
-    data: any,
-    message: string = 'successfull',
-    errorType: string | null = null,
+    data: T,
+    message: string = 'Success',
+    errorType: ErrorType | null = null,
   ) {
     this.message = message;
     this.data = data;
