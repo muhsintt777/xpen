@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { logger } from '#/configs/logger.js';
+import { logger } from '#/infra/logger.js';
 import z from 'zod';
 
 const parseBooleanEnv = (value: string | undefined): boolean =>

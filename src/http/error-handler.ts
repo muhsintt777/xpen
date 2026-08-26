@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { getZodErrMessage } from '#/validation/zod-errors.js';
 import { CustomError } from '#/errors/app-error.js';
-import { logger } from '#/configs/logger.js';
+import { logger } from '#/infra/logger.js';
 import { ApiResponse } from './api-response.js';
 
 export const errorHandler = (

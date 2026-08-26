@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import { ENV } from '#/configs/env.js';
-import { logger } from '#/configs/logger.js';
+import { logger } from '#/infra/logger.js';
 
 export const db = new Pool({
   connectionString: ENV.DB_URL,

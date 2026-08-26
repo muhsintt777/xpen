@@ -1,5 +1,5 @@
 import { pinoHttp } from 'pino-http';
-import { logger } from '#/configs/logger.js';
+import { logger } from '#/infra/logger.js';
 
 export const loggerMiddleWare = pinoHttp({
   logger,

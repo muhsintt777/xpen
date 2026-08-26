@@ -1,5 +1,5 @@
 import { db } from '#/infra/db.js';
-import { logger } from '#/configs/logger.js';
+import { logger } from '#/infra/logger.js';
 
 const categories = [
   'Food',
