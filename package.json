@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docker:build": "docker compose build",
-    "docker:up": "docker compose up",
+    "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
   },
   "dependencies": {
