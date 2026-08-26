@@ -1,6 +1,6 @@
 import { ENV, validateEnv } from '#/configs/env.js';
 import { app } from '#/main/app.js';
-import { connectDb } from '#/configs/db.js';
+import { connectDb } from '#/infra/db.js';
 import { logger } from '#/configs/logger.js';
 
 async function startServer(): Promise<void> {

@@ -1,4 +1,4 @@
-import { db } from '#/configs/db.js';
+import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import {
   CreateExpenseParams,

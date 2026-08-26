@@ -1,4 +1,4 @@
-import { db } from '#/configs/db.js';
+import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
 import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
