@@ -10,7 +10,11 @@ export class ExpenseController {
       req.token?.userId as string,
       req.query as unknown as Pagination,
     );
-    res.status(200).json(new ApiResponse(expenses, 'Expenses fetched'));
+    res
+      .status(200)
+      .json(
+        ApiResponse.success({ data: expenses, message: 'Expenses fetched' }),
+      );
   }
 
   static async createExpense(req: Request, res: Response) {
@@ -23,7 +27,9 @@ export class ExpenseController {
       userId: req.token?.userId as string,
     };
     await ExpenseService.createExpense(payload);
-    res.status(201).json(new ApiResponse(null, 'Expense created'));
+    res
+      .status(201)
+      .json(ApiResponse.success({ data: null, message: 'Expense created' }));
   }
 
   static async updateExpense(req: Request, res: Response) {
@@ -32,7 +38,9 @@ export class ExpenseController {
       req.params.id as string,
       req.body,
     );
-    res.status(200).json(new ApiResponse(null, 'Expense updated'));
+    res
+      .status(200)
+      .json(ApiResponse.success({ data: null, message: 'Expense updated' }));
   }
 
   static async deleteExpense(req: Request, res: Response) {
@@ -40,6 +48,8 @@ export class ExpenseController {
       req.token?.userId as string,
       req.params.id as string,
     );
-    res.status(200).json(new ApiResponse(null, 'Expense deleted'));
+    res
+      .status(200)
+      .json(ApiResponse.success({ data: null, message: 'Expense deleted' }));
   }
 }

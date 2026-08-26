@@ -9,18 +9,22 @@ export class AuthController {
       password: req.body.password as string,
     };
     const result = await AuthService.login(payload);
-    res.status(200).json(new ApiResponse(result, 'Login Success'));
+    res
+      .status(200)
+      .json(ApiResponse.success({ data: result, message: 'Login Success' }));
   }
 
   static async refreshToken(req: Request, res: Response) {
     const result = await AuthService.refreshToken(
       req.body.refreshToken as string,
     );
-    res.status(200).json(new ApiResponse(result));
+    res.status(200).json(ApiResponse.success({ data: result }));
   }
 
   static async logout(req: Request, res: Response) {
     await AuthService.logout(req.token?.userId as string);
-    res.status(200).json(new ApiResponse(null, 'Logout Success'));
+    res
+      .status(200)
+      .json(ApiResponse.success({ data: null, message: 'Logout Success' }));
   }
 }

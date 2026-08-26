@@ -14,19 +14,29 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     res
       .status(err.statusCode)
-      .json(new ApiResponse(null, err.message, err.errorType));
+      .json(
+        ApiResponse.error({ errorType: err.errorType, message: err.message }),
+      );
   } else if (err instanceof ZodError) {
     const message = getZodErrMessage(err);
-    res.status(422).json(new ApiResponse(null, message, 'VALIDATION_ERROR'));
-  } else if (err && (err as any).code === 'EBADCSRFTOKEN') {
     res
-      .status(403)
-      .json(new ApiResponse(null, 'Invalid CSRF token', 'CSRF_ERROR'));
+      .status(422)
+      .json(ApiResponse.error({ errorType: 'VALIDATION_ERROR', message }));
+  } else if (err && (err as any).code === 'EBADCSRFTOKEN') {
+    res.status(403).json(
+      ApiResponse.error({
+        errorType: 'CSRF_ERROR',
+        message: 'Invalid CSRF token',
+      }),
+    );
   } else {
     logger.error({ error: err }, 'Unhandled error');
-    res
-      .status(500)
-      .json(new ApiResponse(null, 'Something went wrong', 'UNKNOWN_ERROR'));
+    res.status(500).json(
+      ApiResponse.error({
+        errorType: 'INTERNAL_SERVER_ERROR',
+        message: 'Something went wrong',
+      }),
+    );
   }
   return;
 };

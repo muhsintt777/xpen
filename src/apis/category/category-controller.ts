@@ -5,17 +5,19 @@ import { CategoryService } from './category-service.js';
 export class CategoryController {
   static async getAllCategories(_req: Request, res: Response) {
     const result = await CategoryService.getAllCategories();
-    res.status(200).json(new ApiResponse(result));
+    res.status(200).json(ApiResponse.success({ data: result }));
   }
 
   static async getCategory(req: Request, res: Response) {
     const result = await CategoryService.getCategory(req.params.id as string);
-    res.status(200).json(new ApiResponse(result));
+    res.status(200).json(ApiResponse.success({ data: result }));
   }
 
   static async createCategory(req: Request, res: Response) {
     await CategoryService.createCategory(req.body.name as string);
-    res.status(201).json(new ApiResponse(null, 'Category created'));
+    res
+      .status(201)
+      .json(ApiResponse.success({ data: null, message: 'Category created' }));
   }
 
   static async updateCategory(req: Request, res: Response) {
@@ -23,6 +25,8 @@ export class CategoryController {
       req.params.id as string,
       req.body.name as string,
     );
-    res.status(200).json(new ApiResponse(null, 'Category updated'));
+    res
+      .status(200)
+      .json(ApiResponse.success({ data: null, message: 'Category updated' }));
   }
 }

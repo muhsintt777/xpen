@@ -18,7 +18,7 @@ export const ERROR_TYPE = {
 
 export type ErrorType = (typeof ERROR_TYPE)[keyof typeof ERROR_TYPE];
 
-const ERROR_STATUS_CODE: Record<ErrorType, number> = {
+export const ERROR_STATUS_CODE: Record<ErrorType, number> = {
   BAD_REQUEST: 400,
   AUTH_TOKEN_EXPIRED: 401,
   AUTH_UNAUTHORIZED: 401,
