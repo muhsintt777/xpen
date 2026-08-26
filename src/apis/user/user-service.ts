@@ -1,6 +1,6 @@
 import { db } from '#/configs/db.js';
 import { CustomError } from '#/utils/error.js';
-import { HashUtils } from '#/utils/hash-utils.js';
+import { PasswordHasher } from '#/security/password-hasher.js';
 import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
 import { Pagination } from '#/types/common-types.js';
 
@@ -40,7 +40,7 @@ export class UserService {
 
   static async createUser(params: CreateUserParams) {
     const { fullname, email, password } = params;
-    const passwordHash = await HashUtils.hashString(password);
+    const passwordHash = await PasswordHasher.hash(password);
     const q = `INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3)`;
     await db.query(q, [fullname, email, passwordHash]);
   }

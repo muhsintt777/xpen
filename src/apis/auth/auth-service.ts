@@ -1,8 +1,8 @@
 import { db } from '#/configs/db.js';
 import { CustomError } from '#/utils/error.js';
 import { User } from '../user/user-types.js';
-import { HashUtils } from '#/utils/hash-utils.js';
-import { Token } from '#/utils/token.js';
+import { PasswordHasher } from '#/security/password-hasher.js';
+import { AuthTokenService } from '#/security/auth-token-service.js';
 import { LoginParams } from './auth-types.js';
 
 export class AuthService {
@@ -19,14 +19,17 @@ export class AuthService {
     if (!user) {
       throw new CustomError('AUTH_UNAUTHORIZED', 'Invalid email or password');
     }
-    const isPasswordValid = await HashUtils.compare(password, user.password);
+    const isPasswordValid = await PasswordHasher.verify(
+      password,
+      user.password,
+    );
     if (!isPasswordValid) {
       throw new CustomError('AUTH_UNAUTHORIZED', 'Invalid email or password');
     }
-    const accessToken = Token.createAccessToken({
+    const accessToken = AuthTokenService.createAccessToken({
       userId: user.id,
     });
-    const refreshToken = Token.createRefreshToken({
+    const refreshToken = AuthTokenService.createRefreshToken({
       userId: user.id,
     });
     const q2 = `
@@ -39,7 +42,7 @@ export class AuthService {
   }
 
   static async refreshToken(refreshToken: string) {
-    const { userId } = Token.verifyRefreshToken(refreshToken);
+    const { userId } = AuthTokenService.verifyRefreshToken(refreshToken);
     const q = `
       SELECT id
       FROM users
@@ -51,7 +54,7 @@ export class AuthService {
       throw new CustomError('SIGNED_OUT', 'Unauthorized');
     }
 
-    return Token.createAccessToken({ userId: user.id });
+    return AuthTokenService.createAccessToken({ userId: user.id });
   }
 
   static async logout(userID: string) {

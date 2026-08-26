@@ -1,4 +1,4 @@
-import { AccessTokenData } from '#/utils/token.ts';
+import { AccessTokenData } from '#/security/auth-token-service.js';
 
 declare module 'express' {
   interface Request {
