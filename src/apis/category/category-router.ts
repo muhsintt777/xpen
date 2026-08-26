@@ -7,7 +7,7 @@ import {
   // CreateCategoryReqSchema,
   UpdateCategoryReqSchema,
 } from './category-validation.js';
-import { idReqParamSchema } from '#/validation/schemas.js';
+import { ReqParamIdSchema } from '#/validation/schemas.js';
 
 const router: Router = Router();
 
@@ -27,7 +27,7 @@ router.get(
 router.get(
   '/:id',
   AuthMiddleware.verifyToken,
-  validateReq(idReqParamSchema),
+  validateReq(ReqParamIdSchema),
   asyncHandler(CategoryController.getCategory),
 );
 

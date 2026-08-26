@@ -4,7 +4,7 @@ import { UserController } from './user-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
 import { validateReq } from '#/middlewares/validation-middleware.js';
 import { CreateUserSchema } from './user-validation.js';
-import { idReqParamSchema, PaginationSchema } from '#/validation/schemas.js';
+import { ReqParamIdSchema, PaginationSchema } from '#/validation/schemas.js';
 
 const router: Router = Router();
 
@@ -30,14 +30,14 @@ router.get(
 router.get(
   '/:id',
   AuthMiddleware.verifyToken,
-  validateReq(idReqParamSchema),
+  validateReq(ReqParamIdSchema),
   asyncHandler(UserController.getUser),
 );
 
 router.delete(
   '/:id',
   AuthMiddleware.verifyToken,
-  validateReq(idReqParamSchema),
+  validateReq(ReqParamIdSchema),
   asyncHandler(UserController.deleteUser),
 );
 

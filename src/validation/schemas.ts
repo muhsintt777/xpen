@@ -1,19 +1,11 @@
 import z from 'zod';
 
-export const validateId = (id: unknown): string => {
-  const idSchema = z
-    .string()
-    .trim()
-    .regex(/^[1-9]\d*$/, 'Id is not valid');
-  return idSchema.parse(id);
-};
-
 export const IdSchema = z
   .string()
   .trim()
   .regex(/^[1-9]\d*$/, 'Id is not valid');
 
-export const idReqParamSchema = z.object({
+export const ReqParamIdSchema = z.object({
   params: z.object({
     id: IdSchema,
   }),

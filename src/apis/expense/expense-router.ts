@@ -7,7 +7,7 @@ import {
   CreateExpenseReqSchema,
   UpdateExpenseReqSchema,
 } from './expense-validation.js';
-import { idReqParamSchema, PaginationSchema } from '#/validation/schemas.js';
+import { ReqParamIdSchema, PaginationSchema } from '#/validation/schemas.js';
 
 const router: Router = express.Router();
 router.use(AuthMiddleware.verifyToken);
@@ -32,7 +32,7 @@ router.put(
 
 router.delete(
   '/:id',
-  validateReq(idReqParamSchema),
+  validateReq(ReqParamIdSchema),
   asyncHandler(ExpenseController.deleteExpense),
 );
 
