@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { ENV } from '#/configs/env.js';
+import { AUTH_CONFIG } from '#/configs/auth.js';
 import { CustomError } from '../errors/app-error.js';
 
 export interface AccessTokenData {
@@ -13,7 +14,7 @@ interface RefreshTokenData {
 export class AuthTokenService {
   static createAccessToken(payload: AccessTokenData) {
     const options: jwt.SignOptions = {
-      expiresIn: '10m',
+      expiresIn: AUTH_CONFIG.accessTokenExpiresIn,
     };
     return jwt.sign(payload, ENV.ACCESS_TOKEN_KEY, options);
   }
@@ -28,7 +29,7 @@ export class AuthTokenService {
 
   static createRefreshToken(payload: RefreshTokenData) {
     return jwt.sign(payload, ENV.REFRESH_TOKEN_KEY, {
-      expiresIn: '1d',
+      expiresIn: AUTH_CONFIG.refreshTokenExpiresIn,
     });
   }
 

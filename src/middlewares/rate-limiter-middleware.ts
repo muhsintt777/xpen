@@ -1,8 +1,8 @@
 import rateLimit, { Options, ipKeyGenerator } from 'express-rate-limit';
 import { CustomError } from '#/errors/app-error.js';
+import { RATE_LIMIT_CONFIG } from '#/configs/rate-limit.js';
 
 export class RateLimitMiddleware {
-  private static readonly WINDOW_MS_15_MINUTES = 15 * 60 * 1000;
   private static readonly config: Partial<Options> = {
     standardHeaders: true,
     legacyHeaders: false,
@@ -17,13 +17,13 @@ export class RateLimitMiddleware {
 
   static default = rateLimit({
     ...this.config,
-    windowMs: this.WINDOW_MS_15_MINUTES,
-    max: 500,
+    windowMs: RATE_LIMIT_CONFIG.windowMs,
+    max: RATE_LIMIT_CONFIG.defaultMax,
   });
 
   static auth = rateLimit({
     ...this.config,
-    windowMs: this.WINDOW_MS_15_MINUTES,
-    max: 20,
+    windowMs: RATE_LIMIT_CONFIG.windowMs,
+    max: RATE_LIMIT_CONFIG.authMax,
   });
 }
