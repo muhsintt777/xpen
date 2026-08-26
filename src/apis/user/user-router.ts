@@ -1,4 +1,4 @@
-import { asyncHandler } from '#/utils/async-handler.js';
+import { asyncHandler } from '#/http/async-handler.js';
 import { Router } from 'express';
 import { UserController } from './user-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';

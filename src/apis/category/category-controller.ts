@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ApiResponse } from '#/utils/api-response.js';
+import { ApiResponse } from '#/http/api-response.js';
 import { CategoryService } from './category-service.js';
 
 export class CategoryController {

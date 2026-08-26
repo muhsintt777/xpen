@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { CategoryController } from './category-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
-import { asyncHandler } from '#/utils/async-handler.js';
+import { asyncHandler } from '#/http/async-handler.js';
 import { validateReq } from '#/middlewares/validation-middleware.js';
 import {
   // CreateCategoryReqSchema,

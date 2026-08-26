@@ -4,11 +4,11 @@ import helmet from 'helmet';
 
 import { appRouter } from '#/main/app-router.js';
 import { corsOptions } from '#/configs/cors.js';
-import { errorHandler } from '#/main/error-handler.js';
-import { notFoundRouteHandler } from '#/main/not-found-handler.js';
+import { errorHandler } from '#/http/error-handler.js';
+import { notFoundRouteHandler } from '#/http/not-found-handler.js';
 import { loggerMiddleWare } from '#/middlewares/logger-middleware.js';
 import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
-import { healthHandler } from './health-handler.js';
+import { healthHandler } from '#/http/health-handler.js';
 
 const app: Express = express();
 app.use(helmet());
