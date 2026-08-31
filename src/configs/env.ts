@@ -16,7 +16,7 @@ export const ENV = {
 } as const;
 
 export const validateEnv = (): void => {
-  logger.info('Validating environment variables...');
+  logger.info('Validating ENV...');
 
   const err = z
     .object({
@@ -32,5 +32,5 @@ export const validateEnv = (): void => {
     );
   }
 
-  logger.info('Environment variables validated successfully.');
+  logger.info('ENV validated successfully.');
 };

@@ -16,11 +16,11 @@ export async function connectDb(): Promise<void> {
   } finally {
     client.release();
   }
-  logger.info('Database connection established successfully');
+  logger.info('Database connected successfully');
 }
 
 export async function disconnectDb(): Promise<void> {
   logger.info('Disconnecting from the database...');
   await db.end();
-  logger.info('Database connection closed successfully');
+  logger.info('Database disconnected successfully');
 }

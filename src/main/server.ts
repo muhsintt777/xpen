@@ -10,7 +10,7 @@ async function startServer(): Promise<void> {
     await connectDb();
     const port = ENV.PORT;
     app.listen(port, () => {
-      logger.info({ port }, 'Server is running');
+      logger.info({ port }, 'Server is running on port ' + port);
     });
   } catch (error: any) {
     logger.error({ error }, 'Failed to start the server');
