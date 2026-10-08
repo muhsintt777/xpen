@@ -9,7 +9,7 @@ async function startServer(): Promise<void> {
     validateEnv();
     await connectDb();
     const port = ENV.PORT;
-    app.listen(port, () => {
+    app.listen(port, '0.0.0.0', () => {
       logger.info({ port }, 'Server is running on port ' + port);
     });
   } catch (error: any) {
