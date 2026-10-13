@@ -15,7 +15,7 @@ const LoginBodySchema = z.object({
 });
 
 const RefreshTokenBodySchema = z.object({
-  refreshToken: z.string().trim(),
+  refreshToken: z.string().trim().optional(),
 });
 
 export const LoginSchema = z.object({
@@ -23,5 +23,5 @@ export const LoginSchema = z.object({
 });
 
 export const RefreshTokenSchema = z.object({
-  body: RefreshTokenBodySchema,
+  body: RefreshTokenBodySchema.optional(),
 });

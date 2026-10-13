@@ -3,10 +3,10 @@ import { CustomError } from '#/errors/app-error.js';
 import { User } from '../user/user-types.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
 import { AuthTokenService } from '#/security/auth-token-service.js';
-import { LoginParams } from './auth-types.js';
+import { AuthTokens, LoginParams } from './auth-types.js';
 
 export class AuthService {
-  static async login(params: LoginParams) {
+  static async login(params: LoginParams): Promise<AuthTokens> {
     const { email, password } = params;
     const q1 = `
       SELECT id, email, password 
@@ -26,43 +26,79 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new CustomError('AUTH_UNAUTHORIZED', 'Invalid email or password');
     }
+
     const accessToken = AuthTokenService.createAccessToken({
       userId: user.id,
     });
     const refreshToken = AuthTokenService.createRefreshToken({
       userId: user.id,
     });
-    const q2 = `
-      UPDATE users
-      SET refresh_token = $1
-      WHERE id = $2;
-    `;
-    await db.query(q2, [refreshToken, user.id]);
-    return { accessToken, refreshToken };
-  }
+    const refreshTokenHash = AuthTokenService.hashToken(refreshToken);
 
-  static async refreshToken(refreshToken: string) {
-    const { userId } = AuthTokenService.verifyRefreshToken(refreshToken);
-    const q = `
-      SELECT id
-      FROM users
-      WHERE id = $1 AND refresh_token = $2;
-    `;
-    const user = (await db.query<Pick<User, 'id'>>(q, [userId, refreshToken]))
-      .rows[0];
-    if (!user) {
-      throw new CustomError('SIGNED_OUT', 'Unauthorized');
+    const client = await db.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query('DELETE FROM sessions WHERE user_id = $1;', [user.id]);
+      await client.query(
+        'INSERT INTO sessions (user_id, refresh_token_hash) VALUES ($1, $2);',
+        [user.id, refreshTokenHash],
+      );
+      await client.query('COMMIT');
+
+      return { accessToken, refreshToken };
+    } catch (error) {
+      await client.query('ROLLBACK').catch(() => {});
+      throw error;
+    } finally {
+      client.release();
     }
-
-    return AuthTokenService.createAccessToken({ userId: user.id });
   }
 
-  static async logout(userID: string) {
+  static async refreshToken(refreshToken: string): Promise<AuthTokens> {
+    const { userId } = AuthTokenService.verifyRefreshToken(refreshToken);
+    const currentTokenHash = AuthTokenService.hashToken(refreshToken);
+
+    const newAccessToken = AuthTokenService.createAccessToken({ userId });
+    const newRefreshToken = AuthTokenService.createRefreshToken({ userId });
+    const newRefreshTokenHash = AuthTokenService.hashToken(newRefreshToken);
+
+    const client = await db.connect();
+    try {
+      await client.query('BEGIN');
+
+      const updateQuery = `
+        UPDATE sessions
+        SET refresh_token_hash = $1
+        WHERE user_id = $2 AND refresh_token_hash = $3
+        RETURNING id;
+      `;
+      const result = await client.query(updateQuery, [
+        newRefreshTokenHash,
+        userId,
+        currentTokenHash,
+      ]);
+
+      if (result.rowCount === 0) {
+        await client.query('ROLLBACK');
+        throw new CustomError('SIGNED_OUT', 'Unauthorized');
+      }
+
+      await client.query('COMMIT');
+
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    } catch (error) {
+      await client.query('ROLLBACK').catch(() => {});
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  static async logout(userId: string): Promise<void> {
     const q = `
-      UPDATE users
-      SET refresh_token = NULL
-      WHERE id = $1;
+      DELETE FROM sessions
+      WHERE user_id = $1;
     `;
-    await db.query(q, [userID]);
+    await db.query(q, [userId]);
   }
 }

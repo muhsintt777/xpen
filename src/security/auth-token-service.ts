@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { ENV } from '#/configs/env.js';
 import { AUTH_CONFIG } from '#/configs/auth.js';
@@ -7,7 +8,7 @@ export interface AccessTokenData {
   userId: string;
 }
 
-interface RefreshTokenData {
+export interface RefreshTokenData {
   userId: string;
 }
 
@@ -30,10 +31,18 @@ export class AuthTokenService {
   static createRefreshToken(payload: RefreshTokenData) {
     return jwt.sign(payload, ENV.REFRESH_TOKEN_KEY, {
       expiresIn: AUTH_CONFIG.refreshTokenExpiresIn,
+      jwtid: crypto.randomUUID(),
     });
   }
 
+  static hashToken(token: string): string {
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+
   static verifyRefreshToken(token: string) {
+    if (!token || typeof token !== 'string') {
+      throw new CustomError('SIGNED_OUT', 'Invalid token');
+    }
     try {
       const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_KEY);
       return decoded as RefreshTokenData;
@@ -42,5 +51,3 @@ export class AuthTokenService {
     }
   }
 }
-
-// todo: jwt exprire and invali case handle
