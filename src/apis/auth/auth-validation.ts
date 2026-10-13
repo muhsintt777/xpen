@@ -14,14 +14,6 @@ const LoginBodySchema = z.object({
     .max(50, 'Password must be less than 50 characters'),
 });
 
-const RefreshTokenBodySchema = z.object({
-  refreshToken: z.string().trim().optional(),
-});
-
 export const LoginSchema = z.object({
   body: LoginBodySchema,
-});
-
-export const RefreshTokenSchema = z.object({
-  body: RefreshTokenBodySchema.optional(),
 });
