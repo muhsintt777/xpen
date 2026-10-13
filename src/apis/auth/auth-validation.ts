@@ -17,3 +17,9 @@ const LoginBodySchema = z.object({
 export const LoginSchema = z.object({
   body: LoginBodySchema,
 });
+
+export const RefreshSchema = z.object({
+  body: z.object({
+    refreshToken: z.string().trim().min(1, 'Refresh token is required'),
+  }),
+});

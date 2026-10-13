@@ -14,11 +14,7 @@ export class AuthController {
   }
 
   static async refreshToken(req: Request, res: Response) {
-    const refreshToken =
-      req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
-    if (!refreshToken) {
-      throw new CustomError('AUTH_UNAUTHORIZED', 'Refresh token required');
-    }
+    const refreshToken = req.body.refreshToken as string;
     const result = await AuthService.refreshToken(refreshToken);
     res.json(ApiResponse.success({ data: result }));
   }
