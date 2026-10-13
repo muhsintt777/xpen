@@ -15,10 +15,7 @@ router.post(
   validateReq(LoginSchema),
   asyncHandler(AuthController.login),
 );
-router.post(
-  '/refresh',
-  asyncHandler(AuthController.refreshToken),
-);
+router.post('/refresh', asyncHandler(AuthController.refreshToken));
 router.post(
   '/logout',
   AuthMiddleware.verifyToken,
