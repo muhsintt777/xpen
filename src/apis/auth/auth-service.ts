@@ -62,36 +62,24 @@ export class AuthService {
     const newRefreshToken = AuthTokenService.createRefreshToken({ userId });
     const newRefreshTokenHash = AuthTokenService.hashToken(newRefreshToken);
 
-    const client = await db.connect();
-    try {
-      await client.query('BEGIN');
+    // Single atomic compare-and-swap: only one request can consume a given token.
+    const updateQuery = `
+      UPDATE sessions
+      SET refresh_token_hash = $1
+      WHERE user_id = $2 AND refresh_token_hash = $3
+      RETURNING id;
+    `;
+    const result = await db.query(updateQuery, [
+      newRefreshTokenHash,
+      userId,
+      currentTokenHash,
+    ]);
 
-      const updateQuery = `
-        UPDATE sessions
-        SET refresh_token_hash = $1
-        WHERE user_id = $2 AND refresh_token_hash = $3
-        RETURNING id;
-      `;
-      const result = await client.query(updateQuery, [
-        newRefreshTokenHash,
-        userId,
-        currentTokenHash,
-      ]);
-
-      if (result.rowCount === 0) {
-        await client.query('ROLLBACK');
-        throw new CustomError('SIGNED_OUT', 'Unauthorized');
-      }
-
-      await client.query('COMMIT');
-
-      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-    } catch (error) {
-      await client.query('ROLLBACK').catch(() => {});
-      throw error;
-    } finally {
-      client.release();
+    if (!result.rowCount) {
+      throw new CustomError('SIGNED_OUT', 'Unauthorized');
     }
+
+    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 
   static async logout(userId: string): Promise<void> {
