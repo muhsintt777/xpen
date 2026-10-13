@@ -18,5 +18,5 @@ CREATE TRIGGER trg_sessions_updated_at
 BEFORE UPDATE ON sessions FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
-ALTER TABLE users
-DROP COLUMN IF EXISTS refresh_token;
+--dev
+--prod

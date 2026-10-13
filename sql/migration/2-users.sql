@@ -3,7 +3,6 @@ CREATE TABLE users (
   fullname VARCHAR(100) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  refresh_token VARCHAR(255),
   created_at BIGINT NOT NULL DEFAULT EXTRACT(
     EPOCH
     FROM
@@ -20,4 +19,5 @@ CREATE TRIGGER trg_users_updated_at
 BEFORE UPDATE ON users FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
--- until dev
+-- dev
+-- prod
