@@ -4,7 +4,7 @@ import { AuthController } from './auth-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
 import { validateReq } from '#/middlewares/validation-middleware.js';
 import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
-import { LoginSchema, RefreshTokenSchema } from './auth-validation.js';
+import { LoginSchema } from './auth-validation.js';
 
 const router: Router = Router();
 
@@ -17,7 +17,6 @@ router.post(
 );
 router.post(
   '/refresh',
-  validateReq(RefreshTokenSchema),
   asyncHandler(AuthController.refreshToken),
 );
 router.post(
