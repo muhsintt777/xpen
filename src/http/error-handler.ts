@@ -29,6 +29,7 @@ export const errorHandler = (
       }),
     );
   } else {
+    res.err = err;
     res.status(500).json(
       ApiResponse.error({
         errorType: 'INTERNAL_SERVER_ERROR',
