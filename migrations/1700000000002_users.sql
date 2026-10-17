@@ -1,3 +1,4 @@
+-- Up Migration
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
   fullname VARCHAR(100) NOT NULL,
@@ -19,5 +20,5 @@ CREATE TRIGGER trg_users_updated_at
 BEFORE UPDATE ON users FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
--- dev
--- prod
+-- Down Migration
+DROP TABLE IF EXISTS users;

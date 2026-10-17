@@ -1,3 +1,4 @@
+-- Up Migration
 CREATE TABLE sessions (
   id BIGSERIAL PRIMARY KEY,
   user_id BIGINT NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE,
@@ -18,5 +19,5 @@ CREATE TRIGGER trg_sessions_updated_at
 BEFORE UPDATE ON sessions FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
---dev
---prod
+-- Down Migration
+DROP TABLE IF EXISTS sessions;

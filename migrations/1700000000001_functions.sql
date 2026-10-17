@@ -1,3 +1,4 @@
+-- Up Migration
 CREATE OR REPLACE FUNCTION update_updated_at_column () RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)::BIGINT;
@@ -5,5 +6,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- dev
--- prod
+-- Down Migration
+DROP FUNCTION IF EXISTS update_updated_at_column ();
