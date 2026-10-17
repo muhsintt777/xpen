@@ -1,5 +1,5 @@
 -- Up Migration
-CREATE TABLE expenses (
+CREATE TABLE IF NOT EXISTS expenses (
   id BIGSERIAL PRIMARY KEY,
   amount NUMERIC(12, 2) NOT NULL,
   note VARCHAR(50),
@@ -23,11 +23,13 @@ CREATE TABLE expenses (
   CONSTRAINT expenses_type_check CHECK (type IN ('NEED', 'WANT', 'SAVE'))
 );
 
+DROP TRIGGER IF EXISTS trg_expenses_updated_at ON expenses;
+
 CREATE TRIGGER trg_expenses_updated_at
 BEFORE UPDATE ON expenses FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
 
-CREATE INDEX idx_expenses_user_date ON expenses (user_id, date DESC);
+CREATE INDEX IF NOT EXISTS idx_expenses_user_date ON expenses (user_id, date DESC);
 
 -- Down Migration
 DROP TABLE IF EXISTS expenses;

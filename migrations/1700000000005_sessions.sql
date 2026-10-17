@@ -1,5 +1,5 @@
 -- Up Migration
-CREATE TABLE sessions (
+CREATE TABLE IF NOT EXISTS sessions (
   id BIGSERIAL PRIMARY KEY,
   user_id BIGINT NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE,
   refresh_token_hash VARCHAR(255) NOT NULL,
@@ -14,6 +14,8 @@ CREATE TABLE sessions (
       CURRENT_TIMESTAMP
   )::BIGINT
 );
+
+DROP TRIGGER IF EXISTS trg_sessions_updated_at ON sessions;
 
 CREATE TRIGGER trg_sessions_updated_at
 BEFORE UPDATE ON sessions FOR EACH ROW
