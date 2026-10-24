@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { ExpenseController } from '../../../dist/modules/expense/expense-controller.js';
+import { ExpenseController } from './expense-controller.js';
 import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
 import { asyncHandler } from '#/http/async-handler.js';
 import { validateReq } from '#/middlewares/validation-middleware.js';
