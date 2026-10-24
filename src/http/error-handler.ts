@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { getZodErrMessage } from '#/validation/zod-errors.js';
+import { getZodErrMessage } from './zod-errors.js';
 import { CustomError } from '#/errors/app-error.js';
 import { ApiResponse } from './api-response.js';
 

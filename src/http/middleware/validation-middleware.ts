@@ -45,5 +45,3 @@ export const validateReq =
 
     next();
   };
-
-// todo: find better way to override req

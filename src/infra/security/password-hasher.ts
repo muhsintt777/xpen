@@ -1,4 +1,5 @@
 import { compare, hash } from 'bcrypt';
+
 const SALT_ROUNDS = 10;
 
 export class PasswordHasher {

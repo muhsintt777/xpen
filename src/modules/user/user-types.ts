@@ -14,3 +14,8 @@ export interface CreateUserParams {
   password: string;
   fullname: string;
 }
+
+export interface UserPagination {
+  limit: number;
+  cursor?: string;
+}

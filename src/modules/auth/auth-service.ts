@@ -1,14 +1,14 @@
 import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
-import { UserService } from '../user/user-service.js';
-import { PasswordHasher } from '#/security/password-hasher.js';
-import { AuthTokenService } from '#/security/auth-token-service.js';
+import { getCredentialsByEmail } from '../user/index.js';
+import { PasswordHasher } from '#/infra/security/password-hasher.js';
+import { AuthTokenService } from './auth-token-service.js';
 import { AuthTokens, LoginParams } from './auth-types.js';
 
 export class AuthService {
   static async login(params: LoginParams): Promise<AuthTokens> {
     const { email, password } = params;
-    const user = await UserService.getCredentialsByEmail(email);
+    const user = await getCredentialsByEmail(email);
     if (!user) {
       throw new CustomError('AUTH_UNAUTHORIZED', 'Invalid email or password');
     }

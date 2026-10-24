@@ -1,5 +1,4 @@
 import type { ErrorType } from '../errors/app-error.js';
-import { DateUtils } from '../utils/date-utils.js';
 import type { SuccessType } from './response-types.js';
 import { ERROR_STATUS_CODE, SUCCESS_STATUS_CODE } from './response-types.js';
 
@@ -27,7 +26,7 @@ export class ApiResponse<T = unknown> {
     this.statusCode = statusCode;
     this.errorType = errorType;
     this.success = errorType === null;
-    this.timestamp = DateUtils.getCurrentUnixTimestamp();
+    this.timestamp = Math.floor(Date.now() / 1000);
   }
 
   /**

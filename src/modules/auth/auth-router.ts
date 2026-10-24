@@ -1,9 +1,9 @@
 import { asyncHandler } from '#/http/async-handler.js';
 import { Router } from 'express';
 import { AuthController } from './auth-controller.js';
-import { AuthMiddleware } from '#/middlewares/auth-middleware.js';
-import { validateReq } from '#/middlewares/validation-middleware.js';
-import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
+import { AuthMiddleware } from './auth-middleware.js';
+import { validateReq } from '#/http/middleware/validation-middleware.js';
+import { RateLimitMiddleware } from '#/http/middleware/rate-limiter-middleware.js';
 import { LoginSchema, RefreshSchema } from './auth-validation.js';
 
 const router: Router = Router();

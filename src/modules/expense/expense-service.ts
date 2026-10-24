@@ -2,17 +2,16 @@ import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import {
   CreateExpenseParams,
+  ExpensePagination,
   Expense,
   UpdateExpenseParams,
 } from './expense-types.js';
-import { Pagination } from '#/types/common-types.js';
 
 export class ExpenseService {
-  static async getAllUserExpenses(userId: string, pagination: Pagination) {
-    let cursorClause = '';
-    if (pagination.cursor) {
-      cursorClause = `AND date < ${pagination.cursor}`;
-    }
+  static async getAllUserExpenses(
+    userId: string,
+    pagination: ExpensePagination,
+  ) {
     const q = `
       SELECT 
         e.id, 
@@ -25,12 +24,16 @@ export class ExpenseService {
       FROM expenses e
       LEFT JOIN categories c ON e.category_id = c.id
       WHERE user_id = $1
-      ${cursorClause}
+        AND ($2::bigint IS NULL OR date < $2::bigint)
       ORDER BY date DESC
-      LIMIT $2;
+      LIMIT $3;
     `;
     const result = (
-      await db.query<Omit<Expense, 'userId'>>(q, [userId, pagination.limit + 1])
+      await db.query<Omit<Expense, 'userId'>>(q, [
+        userId,
+        pagination.cursor ?? null,
+        pagination.limit + 1,
+      ])
     ).rows;
 
     const hasNextPage = result.length === pagination.limit + 1;

@@ -6,16 +6,14 @@ import { appRouter } from '#/main/app-router.js';
 import { corsOptions } from '#/configs/cors.js';
 import { errorHandler } from '#/http/error-handler.js';
 import { notFoundRouteHandler } from '#/http/not-found-handler.js';
-import { loggerMiddleWare } from '#/middlewares/logger-middleware.js';
-import { RateLimitMiddleware } from '#/middlewares/rate-limiter-middleware.js';
+import { loggerMiddleWare } from '#/http/middleware/logger-middleware.js';
+import { RateLimitMiddleware } from '#/http/middleware/rate-limiter-middleware.js';
 import { healthHandler } from '#/http/health-handler.js';
-import { responseInterceptorMiddleware } from '#/middlewares/response-interceptor-middleware.js';
 
 const app: Express = express();
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(responseInterceptorMiddleware);
 app.use(loggerMiddleWare);
 app.use(RateLimitMiddleware.default);
 app.get('/health', healthHandler);

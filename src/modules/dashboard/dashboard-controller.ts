@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ApiResponse } from '#/http/api-response.js';
+import { sendApiResponse } from '#/http/send-api-response.js';
 import { DashboardService } from './dashboard-service.js';
 
 export class DashboardController {
@@ -7,6 +8,9 @@ export class DashboardController {
     const data = await DashboardService.getCurrentMonthSummary(
       req.token?.userId as string,
     );
-    res.json(ApiResponse.success({ data, message: 'Dashboard fetched' }));
+    sendApiResponse(
+      res,
+      ApiResponse.success({ data, message: 'Dashboard fetched' }),
+    );
   }
 }

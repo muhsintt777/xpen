@@ -1,4 +1,4 @@
-import { AccessTokenData } from '#/security/auth-token-service.js';
+import type { AccessTokenData } from '#/modules/auth/index.js';
 
 declare module 'express' {
   interface Request {

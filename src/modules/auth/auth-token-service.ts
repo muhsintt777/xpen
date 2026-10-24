@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { ENV } from '#/configs/env.js';
-import { AUTH_CONFIG } from '#/configs/auth.js';
-import { CustomError } from '../errors/app-error.js';
+import { CustomError } from '#/errors/app-error.js';
+import { AUTH_CONFIG } from './auth-config.js';
 
 export interface AccessTokenData {
   userId: string;

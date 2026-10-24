@@ -1,16 +1,22 @@
 import { Request, Response } from 'express';
 import { ApiResponse } from '#/http/api-response.js';
+import { sendApiResponse } from '#/http/send-api-response.js';
 import { ExpenseService } from './expense-service.js';
-import { CreateExpenseParams } from './expense-types.js';
-import { Pagination } from '#/types/common-types.js';
+import { CreateExpenseParams, ExpensePagination } from './expense-types.js';
 
 export class ExpenseController {
   static async getAllUserExpenses(req: Request, res: Response) {
+    const cursor = req.query.cursor as string | undefined;
+    const pagination: ExpensePagination = {
+      limit: req.query.limit as unknown as number,
+      ...(cursor !== undefined ? { cursor: Number(cursor) } : {}),
+    };
     const expenses = await ExpenseService.getAllUserExpenses(
       req.token?.userId as string,
-      req.query as unknown as Pagination,
+      pagination,
     );
-    res.json(
+    sendApiResponse(
+      res,
       ApiResponse.success({ data: expenses, message: 'Expenses fetched' }),
     );
   }
@@ -25,7 +31,8 @@ export class ExpenseController {
       userId: req.token?.userId as string,
     };
     await ExpenseService.createExpense(payload);
-    res.json(
+    sendApiResponse(
+      res,
       ApiResponse.success({
         successType: 'CREATED',
         message: 'Expense created',
@@ -39,7 +46,7 @@ export class ExpenseController {
       req.params.id as string,
       req.body,
     );
-    res.json(ApiResponse.success({ message: 'Expense updated' }));
+    sendApiResponse(res, ApiResponse.success({ message: 'Expense updated' }));
   }
 
   static async deleteExpense(req: Request, res: Response) {
@@ -47,6 +54,6 @@ export class ExpenseController {
       req.token?.userId as string,
       req.params.id as string,
     );
-    res.json(ApiResponse.success({ message: 'Expense deleted' }));
+    sendApiResponse(res, ApiResponse.success({ message: 'Expense deleted' }));
   }
 }

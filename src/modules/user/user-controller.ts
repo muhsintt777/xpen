@@ -1,26 +1,30 @@
 import { Request, Response } from 'express';
 import { UserService } from './user-service.js';
 import { ApiResponse } from '#/http/api-response.js';
+import { sendApiResponse } from '#/http/send-api-response.js';
+import { UserPagination } from './user-types.js';
 
 export class UserController {
   static async getAllUsers(req: Request, res: Response) {
-    const pagination = {
+    const pagination: UserPagination = {
       limit: req.query.limit as unknown as number,
-      cursor: req.query.cursor as string,
+      ...(req.query.cursor !== undefined
+        ? { cursor: req.query.cursor as string }
+        : {}),
     };
     const result = await UserService.getAllUsers(pagination);
-    res.json(ApiResponse.success({ data: result }));
+    sendApiResponse(res, ApiResponse.success({ data: result }));
   }
 
   static async getCurrentUser(req: Request, res: Response) {
     const userID = req.token?.userId!;
     const result = await UserService.getUser(userID);
-    res.json(ApiResponse.success({ data: result }));
+    sendApiResponse(res, ApiResponse.success({ data: result }));
   }
 
   static async getUser(req: Request, res: Response) {
     const result = await UserService.getUser(req.params.id as string);
-    res.json(ApiResponse.success({ data: result }));
+    sendApiResponse(res, ApiResponse.success({ data: result }));
   }
 
   static async createUser(req: Request, res: Response) {
@@ -30,7 +34,8 @@ export class UserController {
       password: req.body.password as string,
     };
     await UserService.createUser(payload);
-    res.json(
+    sendApiResponse(
+      res,
       ApiResponse.success({
         successType: 'CREATED',
         message: 'User created',
@@ -40,6 +45,6 @@ export class UserController {
 
   static async deleteUser(req: Request, res: Response) {
     await UserService.deleteUser(req.params.id as string);
-    res.json(ApiResponse.success({ message: 'User deleted' }));
+    sendApiResponse(res, ApiResponse.success({ message: 'User deleted' }));
   }
 }

@@ -20,7 +20,9 @@ export const UnixDateSchema = z
 export const PaginationSchema = z.object({
   query: z.object({
     limit: z.coerce.number().int().min(1).max(100).default(20),
-
-    cursor: z.string().optional(),
+    cursor: z
+      .string()
+      .regex(/^[1-9]\d*$/, 'Cursor must be a positive integer')
+      .optional(),
   }),
 });

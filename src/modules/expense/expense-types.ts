@@ -1,5 +1,10 @@
 export type ExpenseType = 'NEED' | 'WANT' | 'SAVE';
 
+export interface ExpensePagination {
+  limit: number;
+  cursor?: number;
+}
+
 export interface Expense {
   id: string;
   amount: number;

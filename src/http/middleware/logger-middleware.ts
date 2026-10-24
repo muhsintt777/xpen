@@ -23,8 +23,4 @@ export const loggerMiddleWare = pinoHttp({
     if (res.statusCode >= 400) return 'warn';
     return 'silent';
   },
-
-  // autoLogging: {
-  //   ignore: (req) => req.url === '/health',
-  // },
 });

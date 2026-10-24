@@ -1,36 +1,35 @@
 import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
-import { PasswordHasher } from '#/security/password-hasher.js';
+import { PasswordHasher } from '#/infra/security/password-hasher.js';
 import {
   CreateUserParams,
   User,
+  UserPagination,
   UserWithoutSensitiveInfo,
 } from './user-types.js';
-import { Pagination } from '#/types/common-types.js';
+
+export const getCredentialsByEmail = async (
+  email: string,
+): Promise<Pick<User, 'id' | 'email' | 'password'> | undefined> => {
+  const query = 'SELECT id, email, password FROM users WHERE email = $1';
+  return (
+    await db.query<Pick<User, 'id' | 'email' | 'password'>>(query, [email])
+  ).rows[0];
+};
 
 export class UserService {
-  static async getCredentialsByEmail(
-    email: string,
-  ): Promise<Pick<User, 'id' | 'email' | 'password'> | undefined> {
-    const query = 'SELECT id, email, password FROM users WHERE email = $1';
-    return (
-      await db.query<Pick<User, 'id' | 'email' | 'password'>>(query, [email])
-    ).rows[0];
-  }
-
-  static async getAllUsers(paginationParams: Pagination) {
-    let cursorClause = '';
-    if (paginationParams.cursor) {
-      cursorClause = `WHERE id > ${paginationParams.cursor}`;
-    }
+  static async getAllUsers(paginationParams: UserPagination) {
     const q = `
       SELECT id, fullname, email 
       FROM users
-      ${cursorClause}
-      LIMIT $1
+      WHERE ($1::bigint IS NULL OR id > $1::bigint)
+      LIMIT $2
     `;
     const result = (
-      await db.query<UserWithoutSensitiveInfo>(q, [paginationParams.limit + 1])
+      await db.query<UserWithoutSensitiveInfo>(q, [
+        paginationParams.cursor ?? null,
+        paginationParams.limit + 1,
+      ])
     ).rows;
     const hasNextPage = result.length === paginationParams.limit + 1;
     if (hasNextPage) result.pop();
