@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { logger } from '#/infra/logger.js';
 
 async function startServer(): Promise<void> {
@@ -15,7 +16,7 @@ async function startServer(): Promise<void> {
       logger.info({ port }, 'Server is running on port ' + port);
     });
   } catch (error) {
-    logger.error({ error }, 'Failed to start the server');
+    logger.error({ err: error }, 'Failed to start the server');
     process.exit(1);
   }
 }

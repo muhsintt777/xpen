@@ -1,10 +1,23 @@
 import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
-import { CreateUserParams, UserWithoutSensitiveInfo } from './user-types.js';
+import {
+  CreateUserParams,
+  User,
+  UserWithoutSensitiveInfo,
+} from './user-types.js';
 import { Pagination } from '#/types/common-types.js';
 
 export class UserService {
+  static async getCredentialsByEmail(
+    email: string,
+  ): Promise<Pick<User, 'id' | 'email' | 'password'> | undefined> {
+    const query = 'SELECT id, email, password FROM users WHERE email = $1';
+    return (
+      await db.query<Pick<User, 'id' | 'email' | 'password'>>(query, [email])
+    ).rows[0];
+  }
+
   static async getAllUsers(paginationParams: Pagination) {
     let cursorClause = '';
     if (paginationParams.cursor) {

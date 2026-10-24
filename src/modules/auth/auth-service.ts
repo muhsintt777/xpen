@@ -1,6 +1,6 @@
 import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
-import { User } from '../user/user-types.js';
+import { UserService } from '../user/user-service.js';
 import { PasswordHasher } from '#/security/password-hasher.js';
 import { AuthTokenService } from '#/security/auth-token-service.js';
 import { AuthTokens, LoginParams } from './auth-types.js';
@@ -8,14 +8,7 @@ import { AuthTokens, LoginParams } from './auth-types.js';
 export class AuthService {
   static async login(params: LoginParams): Promise<AuthTokens> {
     const { email, password } = params;
-    const q1 = `
-      SELECT id, email, password 
-      FROM users 
-      WHERE email = $1;
-    `;
-    const user = (
-      await db.query<Pick<User, 'id' | 'email' | 'password'>>(q1, [email])
-    ).rows[0];
+    const user = await UserService.getCredentialsByEmail(email);
     if (!user) {
       throw new CustomError('AUTH_UNAUTHORIZED', 'Invalid email or password');
     }

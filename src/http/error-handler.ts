@@ -11,31 +11,31 @@ export const errorHandler = (
   _next: NextFunction,
 ) => {
   if (err instanceof CustomError) {
-    res
-      .status(err.statusCode)
-      .json(
-        ApiResponse.error({ errorType: err.errorType, message: err.message }),
-      );
+    const response = ApiResponse.error({
+      errorType: err.errorType,
+      message: err.message,
+    });
+    res.status(response.statusCode).json(response);
   } else if (err instanceof ZodError) {
     const message = getZodErrMessage(err);
-    res
-      .status(422)
-      .json(ApiResponse.error({ errorType: 'VALIDATION_ERROR', message }));
+    const response = ApiResponse.error({
+      errorType: 'VALIDATION_ERROR',
+      message,
+    });
+    res.status(response.statusCode).json(response);
   } else if (err && (err as any).code === 'EBADCSRFTOKEN') {
-    res.status(403).json(
-      ApiResponse.error({
-        errorType: 'CSRF_ERROR',
-        message: 'Invalid CSRF token',
-      }),
-    );
+    const response = ApiResponse.error({
+      errorType: 'CSRF_ERROR',
+      message: 'Invalid CSRF token',
+    });
+    res.status(response.statusCode).json(response);
   } else {
     res.err = err;
-    res.status(500).json(
-      ApiResponse.error({
-        errorType: 'INTERNAL_SERVER_ERROR',
-        message: 'Something went wrong',
-      }),
-    );
+    const response = ApiResponse.error({
+      errorType: 'INTERNAL_SERVER_ERROR',
+      message: 'Something went wrong',
+    });
+    res.status(response.statusCode).json(response);
   }
   return;
 };
