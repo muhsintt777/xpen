@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { AuthMiddleware } from '../auth/index.js';
+import { AuthMiddleware } from '#modules/auth';
 import { asyncHandler } from '#/http/async-handler.js';
 import { DashboardController } from './dashboard-controller.js';
 

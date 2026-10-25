@@ -1,5 +1,5 @@
 import { db } from '#/infra/db.js';
-import type { ExpenseType } from '../expense/index.js';
+import type { ExpenseType } from '#modules/expense';
 import type { DashboardSummary } from './dashboard-types.js';
 
 export class DashboardRepository {

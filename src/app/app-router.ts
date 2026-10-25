@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { expenseRouter } from '#/modules/expense/expense-router.js';
-import { userRouter } from '#/modules/user/user-router.js';
-import { authRouter } from '#/modules/auth/auth-router.js';
-import { categoryRouter } from '#/modules/category/category-router.js';
-import { dashboardRouter } from '#/modules/dashboard/dashboard-router.js';
+import { expenseRouter } from '#modules/expense';
+import { userRouter } from '#modules/user';
+import { authRouter } from '#modules/auth';
+import { categoryRouter } from '#modules/category';
+import { dashboardRouter } from '#modules/dashboard';
 
 const router: Router = Router();
 router.use('/auth', authRouter);

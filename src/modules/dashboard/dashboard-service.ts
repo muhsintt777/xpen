@@ -1,5 +1,5 @@
 import { DashboardSummary } from './dashboard-types.js';
-import type { ExpenseType } from '../expense/index.js';
+import type { ExpenseType } from '#modules/expense';
 import { DashboardRepository } from './dashboard-repository.js';
 
 export class DashboardService {

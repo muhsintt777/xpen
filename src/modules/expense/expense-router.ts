@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { ExpenseController } from './expense-controller.js';
-import { AuthMiddleware } from '../auth/index.js';
+import { AuthMiddleware } from '#modules/auth';
 import { asyncHandler } from '#/http/async-handler.js';
 import { validateReq } from '#/http/middleware/validation-middleware.js';
 import {

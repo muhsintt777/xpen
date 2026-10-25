@@ -1,5 +1,5 @@
 import { CustomError } from '#/errors/app-error.js';
-import { getCredentialsByEmail } from '../user/index.js';
+import { getCredentialsByEmail } from '#modules/user';
 import { PasswordHasher } from '#/infra/security/password-hasher.js';
 import { AuthRepository } from './auth-repository.js';
 import { AuthTokenService } from './auth-token-service.js';

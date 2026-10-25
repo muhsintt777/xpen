@@ -1,7 +1,7 @@
 import { asyncHandler } from '#/http/async-handler.js';
 import { Router } from 'express';
 import { UserController } from './user-controller.js';
-import { AuthMiddleware } from '../auth/index.js';
+import { AuthMiddleware } from '#modules/auth';
 import { validateReq } from '#/http/middleware/validation-middleware.js';
 import { CreateUserSchema } from './user-validation.js';
 import { ReqParamIdSchema, PaginationSchema } from '#/validation/schemas.js';

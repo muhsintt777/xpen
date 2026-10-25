@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { CategoryController } from './category-controller.js';
-import { AuthMiddleware } from '../auth/index.js';
+import { AuthMiddleware } from '#modules/auth';
 import { asyncHandler } from '#/http/async-handler.js';
 import { validateReq } from '#/http/middleware/validation-middleware.js';
 import {

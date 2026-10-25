@@ -1,4 +1,4 @@
-import type { ExpenseType } from '../expense/index.js';
+import type { ExpenseType } from '#modules/expense';
 
 export interface DashboardSummary {
   totalExpense: number;
