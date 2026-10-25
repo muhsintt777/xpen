@@ -1,8 +1,8 @@
 # Xpen Server
 
-A TypeScript and PostgreSQL REST API for personal expense tracking. The project is organized around explicit feature modules, shared HTTP and security infrastructure, and SQL-backed services, with separate load-test and query-plan notes documenting performance work.
+A TypeScript and PostgreSQL REST API for personal expense tracking, built as a modular monolith. Its architecture makes feature ownership, module interfaces, business rules, and persistence responsibilities visible in the code, with documented query-plan and load-test work alongside the implementation.
 
-## Architecture
+## Modular Architecture
 
 ```mermaid
 flowchart LR
@@ -10,23 +10,34 @@ flowchart LR
     Middleware --> Routers[Feature routers]
     Routers --> Controllers[Controllers]
     Controllers --> Services[Feature services]
-    Services --> Pool[PostgreSQL connection pool]
+    Services --> Repositories[Feature repositories]
+    Repositories --> Pool[PostgreSQL connection pool]
     Pool --> Database[(PostgreSQL)]
     Middleware --> Shared[Validation, responses, errors, logging]
     Services --> Security[Password and token services]
 ```
 
-The codebase keeps HTTP concerns and business operations in separate layers. Feature modules under `src/apis/` own their route, controller, service, types, and validation; reusable middleware, security helpers, configuration, and database connectivity live in dedicated shared modules.
+The API is one deployable application, divided into cohesive feature modules rather than technical-layer-only folders. Each feature owns its API and application behavior; shared infrastructure is kept outside those modules.
 
-## Engineering Highlights
+| Boundary              | Responsibility                                                                                                             |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| HTTP and middleware   | Application composition, routing, request validation, authentication, logging, response formatting, and centralized errors |
+| Feature modules       | Auth, users, categories, expenses, and dashboard use cases, types, and route/controller adapters                           |
+| Services              | Business decisions and orchestration, such as cursor pagination and translating missing updates into domain errors         |
+| Repositories          | PostgreSQL queries and persistence operations, isolated from HTTP concerns                                                 |
+| Shared infrastructure | Database pool, security primitives, environment configuration, and reusable HTTP middleware                                |
 
-- **Feature-oriented structure:** Auth, users, categories, expenses, and dashboard behavior are isolated into modules, while shared concerns are centralized instead of duplicated across endpoints.
+Modules expose intentional entry points through `index.ts`; cross-module imports use the `#modules/*` alias. This keeps consumers coupled to a module's exported surface rather than its internal file layout. TypeScript strictness options, including `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`, make boundary assumptions more explicit at compile time.
+
+## Engineering Practices
+
+- **Explicit module contracts:** Feature ownership and public exports reduce accidental coupling while allowing one deployable application and shared infrastructure.
 - **Validated request boundaries:** Zod schemas validate request bodies, parameters, and query values before controllers use them. A shared error handler translates validation and application errors into a consistent API response shape.
-- **Explicit persistence behavior:** Services use PostgreSQL queries with bound parameters. Expense listing uses limit-plus-one pagination to determine whether another page exists, and update/delete queries scope mutations to the authenticated user's records.
-- **Refresh-token rotation:** Refresh tokens are JWTs with unique IDs; only SHA-256 token hashes are persisted. Refresh replaces the stored hash in one conditional update, so concurrent reuse of a consumed token cannot succeed twice.
-- **Database lifecycle and pooling:** The `pg` pool is configured centrally, startup validates environment variables and checks database connectivity before listening, and shutdown support is exposed through a pool close function.
-- **Operational safeguards:** Helmet, configured CORS, request logging, a global rate limit, and a stricter auth-route limit are wired at the application boundary. Unknown routes and unexpected errors receive centralized handling.
-- **Query and load-test evidence:** The repository records `EXPLAIN ANALYZE` results for a 10-million-row expense dataset and load-test reports for health, category, and expense endpoints. These are documented measurements, not general capacity guarantees.
+- **Separated application and persistence logic:** Services own workflow decisions; repositories own SQL. Parameterized queries, user-scoped expense mutations, and limit-plus-one cursor pagination make data access behavior explicit.
+- **Security with stateful revocation:** Password hashing, access/refresh token handling, hashed refresh-token storage, and atomic token rotation are separated into focused services and repositories.
+- **Operational lifecycle:** Environment validation and a database connectivity check happen before the server starts accepting traffic. Database pooling, Helmet, CORS, request logging, and layered rate limits are configured centrally.
+- **Schema evolution:** Timestamped SQL migrations are managed through `node-pg-migrate`, keeping database changes ordered and repeatable.
+- **Measured performance:** The repository includes an `EXPLAIN ANALYZE` report for a 10-million-row expense dataset and endpoint load-test reports. These are documented test results, not production capacity guarantees.
 
 ## Capabilities
 
@@ -67,7 +78,13 @@ ACCESS_TOKEN_KEY=replace-with-a-long-secret
 REFRESH_TOKEN_KEY=replace-with-a-different-long-secret
 ```
 
-Run the SQL files in `sql/migration/` in numeric order to create the schema. Optional seed SQL is in `sql/seed/`.
+Apply pending schema and category-seed migrations from `migrations/`:
+
+```bash
+pnpm migrate:up
+```
+
+Optional user and expense seed SQL is in `seed/`.
 
 ### Run
 
