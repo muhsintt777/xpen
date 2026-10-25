@@ -2,7 +2,7 @@
 
 - Dont over engineer
 - Use pnpm for package management
-- Follow modular monolithic architecture
+- Follow modular monolith architecture
 
 ### Git
 
