@@ -5,7 +5,7 @@ async function startServer(): Promise<void> {
   try {
     const { ENV } = await import('#/configs/env.js');
     const [{ app }, { connectDb }] = await Promise.all([
-      import('#/main/app.js'),
+      import('#/app/app.js'),
       import('#/infra/db.js'),
     ]);
 

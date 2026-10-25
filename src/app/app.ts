@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 
-import { appRouter } from '#/main/app-router.js';
+import { appRouter } from '#/app/app-router.js';
 import { corsOptions } from '#/configs/cors.js';
 import { errorHandler } from '#/http/error-handler.js';
 import { notFoundRouteHandler } from '#/http/not-found-handler.js';
