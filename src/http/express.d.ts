@@ -1,7 +1,7 @@
-import type { AccessTokenData } from '#/modules/auth/index.js';
+import type { AuthenticatedUser } from '#/types/authenticated-user.js';
 
 declare module 'express' {
   interface Request {
-    token?: AccessTokenData;
+    token?: AuthenticatedUser;
   }
 }

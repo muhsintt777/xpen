@@ -2,18 +2,15 @@ import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { ENV } from '#/configs/env.js';
 import { CustomError } from '#/errors/app-error.js';
+import type { AuthenticatedUser } from '#/types/authenticated-user.js';
 import { AUTH_CONFIG } from './auth-config.js';
-
-export interface AccessTokenData {
-  userId: string;
-}
 
 export interface RefreshTokenData {
   userId: string;
 }
 
 export class AuthTokenService {
-  static createAccessToken(payload: AccessTokenData) {
+  static createAccessToken(payload: AuthenticatedUser) {
     const options: jwt.SignOptions = {
       expiresIn: AUTH_CONFIG.accessTokenExpiresIn,
     };
@@ -22,7 +19,7 @@ export class AuthTokenService {
 
   static verifyAccessToken(token: string) {
     try {
-      return jwt.verify(token, ENV.ACCESS_TOKEN_KEY) as AccessTokenData;
+      return jwt.verify(token, ENV.ACCESS_TOKEN_KEY) as AuthenticatedUser;
     } catch (err) {
       throw new CustomError('AUTH_TOKEN_EXPIRED', 'Token expired');
     }

@@ -1,6 +1,6 @@
 import { db } from '#/infra/db.js';
 import { DashboardSummary } from './dashboard-types.js';
-import { ExpenseType } from '../expense/expense-types.js';
+import type { ExpenseType } from '../expense/index.js';
 
 export class DashboardService {
   static async getCurrentMonthSummary(
