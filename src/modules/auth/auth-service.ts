@@ -1,7 +1,7 @@
-import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import { getCredentialsByEmail } from '../user/index.js';
 import { PasswordHasher } from '#/infra/security/password-hasher.js';
+import { AuthRepository } from './auth-repository.js';
 import { AuthTokenService } from './auth-token-service.js';
 import { AuthTokens, LoginParams } from './auth-types.js';
 
@@ -28,23 +28,8 @@ export class AuthService {
     });
     const refreshTokenHash = AuthTokenService.hashToken(refreshToken);
 
-    const client = await db.connect();
-    try {
-      await client.query('BEGIN');
-      await client.query('DELETE FROM sessions WHERE user_id = $1;', [user.id]);
-      await client.query(
-        'INSERT INTO sessions (user_id, refresh_token_hash) VALUES ($1, $2);',
-        [user.id, refreshTokenHash],
-      );
-      await client.query('COMMIT');
-
-      return { accessToken, refreshToken };
-    } catch (error) {
-      await client.query('ROLLBACK').catch(() => {});
-      throw error;
-    } finally {
-      client.release();
-    }
+    await AuthRepository.replaceSession(user.id, refreshTokenHash);
+    return { accessToken, refreshToken };
   }
 
   static async refreshToken(refreshToken: string): Promise<AuthTokens> {
@@ -56,19 +41,13 @@ export class AuthService {
     const newRefreshTokenHash = AuthTokenService.hashToken(newRefreshToken);
 
     // Single atomic compare-and-swap: only one request can consume a given token.
-    const updateQuery = `
-      UPDATE sessions
-      SET refresh_token_hash = $1
-      WHERE user_id = $2 AND refresh_token_hash = $3
-      RETURNING id;
-    `;
-    const result = await db.query(updateQuery, [
-      newRefreshTokenHash,
+    const rotated = await AuthRepository.rotateRefreshToken(
       userId,
       currentTokenHash,
-    ]);
+      newRefreshTokenHash,
+    );
 
-    if (!result.rowCount) {
+    if (!rotated) {
       throw new CustomError('SIGNED_OUT', 'Unauthorized');
     }
 
@@ -76,10 +55,6 @@ export class AuthService {
   }
 
   static async logout(userId: string): Promise<void> {
-    const q = `
-      DELETE FROM sessions
-      WHERE user_id = $1;
-    `;
-    await db.query(q, [userId]);
+    await AuthRepository.deleteSession(userId);
   }
 }

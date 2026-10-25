@@ -1,40 +1,17 @@
-import { db } from '#/infra/db.js';
 import { CustomError } from '#/errors/app-error.js';
 import {
   CreateExpenseParams,
   ExpensePagination,
-  Expense,
   UpdateExpenseParams,
 } from './expense-types.js';
+import { ExpenseRepository } from './expense-repository.js';
 
 export class ExpenseService {
   static async getAllUserExpenses(
     userId: string,
     pagination: ExpensePagination,
   ) {
-    const q = `
-      SELECT 
-        e.id, 
-        e.amount,
-        e.note, 
-        e.category_id AS "categoryId",
-        e.type,
-        e.date,
-        c.name AS "categoryName"
-      FROM expenses e
-      LEFT JOIN categories c ON e.category_id = c.id
-      WHERE user_id = $1
-        AND ($2::bigint IS NULL OR date < $2::bigint)
-      ORDER BY date DESC
-      LIMIT $3;
-    `;
-    const result = (
-      await db.query<Omit<Expense, 'userId'>>(q, [
-        userId,
-        pagination.cursor ?? null,
-        pagination.limit + 1,
-      ])
-    ).rows;
+    const result = await ExpenseRepository.findAllForUser(userId, pagination);
 
     const hasNextPage = result.length === pagination.limit + 1;
     if (hasNextPage) result.pop();
@@ -49,12 +26,7 @@ export class ExpenseService {
   }
 
   static async createExpense(params: CreateExpenseParams) {
-    const { amount, note, categoryId, type, date, userId } = params;
-    const q = `
-      INSERT INTO expenses (amount, note, category_id, type, date, user_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
-    `;
-    await db.query(q, [amount, note, categoryId, type, date, userId]);
+    await ExpenseRepository.create(params);
   }
 
   static async updateExpense(
@@ -62,43 +34,18 @@ export class ExpenseService {
     expenseId: string,
     params: UpdateExpenseParams,
   ) {
-    const fields = [
-      ['amount', params.amount],
-      ['note', params.note],
-      ['category_id', params.categoryId],
-      ['type', params.type],
-      ['date', params.date],
-    ] as const;
-
-    const providedFields = fields.filter(
-      ([, value]) => value !== undefined && value !== null,
+    const updated = await ExpenseRepository.updateForUser(
+      userId,
+      expenseId,
+      params,
     );
 
-    const setClause = providedFields
-      .map(([column], index) => `${column} = $${index + 1}`)
-      .join(', ');
-
-    const values = providedFields.map(([, value]) => value);
-
-    const q = `
-    UPDATE expenses
-    SET ${setClause}
-    WHERE id = $${values.length + 1}
-      AND user_id = $${values.length + 2}
-  `;
-
-    const result = await db.query(q, [...values, expenseId, userId]);
-
-    if (!result.rowCount) {
+    if (!updated) {
       throw new CustomError('RESOURCE_NOT_FOUND', 'Expense not found');
     }
   }
 
   static async deleteExpense(userId: string, expenseId: string) {
-    const q = `
-      DELETE FROM expenses
-      WHERE id = $1 AND user_id = $2
-    `;
-    await db.query(q, [expenseId, userId]);
+    await ExpenseRepository.deleteForUser(userId, expenseId);
   }
 }
