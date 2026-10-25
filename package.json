@@ -7,9 +7,9 @@
     "#/*": "./dist/*"
   },
   "scripts": {
-    "dev": "tsx watch src/main/server.ts",
+    "dev": "tsx watch src/app/server.ts",
     "build": "tsc",
-    "start": "node dist/main/server.js",
+    "start": "node dist/app/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
