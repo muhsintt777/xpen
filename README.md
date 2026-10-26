@@ -2,7 +2,7 @@
 
 A TypeScript and PostgreSQL REST API for personal expense tracking, built as a modular monolith. Its architecture makes feature ownership, module interfaces, business rules, and persistence responsibilities visible in the code, with documented query-plan and load-test work alongside the implementation.
 
-## Modular Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -29,7 +29,7 @@ The API is one deployable application, divided into cohesive feature modules rat
 
 Modules expose intentional entry points through `index.ts`; cross-module imports use the `#modules/*` alias. This keeps consumers coupled to a module's exported surface rather than its internal file layout. TypeScript strictness options, including `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`, make boundary assumptions more explicit at compile time.
 
-## Engineering Practices
+## Engineering Highlights
 
 - **Explicit module contracts:** Feature ownership and public exports reduce accidental coupling while allowing one deployable application and shared infrastructure.
 - **Validated request boundaries:** Zod schemas validate request bodies, parameters, and query values before controllers use them. A shared error handler translates validation and application errors into a consistent API response shape.
